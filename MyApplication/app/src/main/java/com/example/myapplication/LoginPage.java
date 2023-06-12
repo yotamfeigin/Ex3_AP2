@@ -27,6 +27,8 @@ import java.net.URLEncoder;
 
 public class LoginPage extends AppCompatActivity {
     private EditText etUsername, etPassword;
+    private String Username, Password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +37,15 @@ public class LoginPage extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        Button btnLogin = findViewById(R.id.btnLogin);
+               Button btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginAPI loginApi = new LoginAPI(etUsername.toString(),etPassword.toString());
+                Username = etUsername.getText().toString();
+                Password = etPassword.getText().toString();
+
+                LoginAPI loginApi = new LoginAPI(Username,Password);
                 loginApi.postLogin();
             }
         });

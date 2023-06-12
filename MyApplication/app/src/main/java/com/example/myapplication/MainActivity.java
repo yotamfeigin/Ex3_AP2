@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
         ExampleAsyncTask task = new ExampleAsyncTask(this);
         task.execute(100);
+        Button login = findViewById(R.id.login_button);
+        login.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                goToLoginPage();
+            }
+        });
     }
 
     public void startAsyncTask(View v) {
@@ -108,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
             animation.setDuration(2000);
             animation.start();
 
-            // Navigate to LoginPageActivity
-            activity.goToLoginPage();
         }
     }
 }
