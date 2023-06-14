@@ -3,6 +3,13 @@ package com.example.myapplication.api;
 import android.util.Log;
 
 import com.example.myapplication.R;
+import com.example.myapplication.ResponseData;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,32 +35,39 @@ public class LoginAPI {
     }
 
     public void postLogin() {
-        try{
-
-        Call<String> call = webServiceAPI.postLogin(username, password);
+        try {
+            Call<JsonObject> call = webServiceAPI.postLogin(username, password);
             String url = call.request().url().toString(); // Get the URL from the request
             Log.d("LoginAPI", "Request URL: " + url);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    String res = response.body();
-                    // Handle successful response
-                    Log.d("LoginAPI", "Response: " + res);
-                } else {
-                    // Handle unsuccessful response
-                    Log.e("LoginAPI", "Response error: " + response.code());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                // Handle network failure
-                Log.e("LoginAPI", "Network error: " + t.getMessage());
-            }
-        });
-    }
-        catch (Exception e) {
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.isSuccessful()) {
+                        JsonObject responseObject = response.body(); // Get the response body as a JSON object
+
+                        // Convert the JSON object to a string using Gson
+                        Gson gson = new Gson();
+                        String jsonString = gson.toJson(responseObject);
+                        Log.d("Response", jsonString);
+
+                        // Handle the JSON object response
+                        // ...
+                    } else {
+                        // Handle unsuccessful response
+                        Log.e("LoginAPI", "Response error: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    // Handle network failure
+                    Log.e("LoginAPI", "Network error: " + t.getMessage());
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-}}
+    }
+
+}
