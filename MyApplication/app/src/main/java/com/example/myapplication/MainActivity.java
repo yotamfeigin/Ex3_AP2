@@ -42,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
                 goToLoginPage();
             }
         });
+
+        Button register = findViewById(R.id.register_button);
+
+        register.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToRegisterPage();
+            }
+        });
     }
 
     public void startAsyncTask(View v) {
@@ -51,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToLoginPage() {
         Intent intent = new Intent(MainActivity.this, LoginPage.class);
+        startActivity(intent);
+    }
+
+    public void goToRegisterPage() {
+        Intent intent = new Intent(MainActivity.this, RegisterPage.class);
         startActivity(intent);
     }
 

@@ -3,7 +3,6 @@ package com.example.myapplication.api;
 import android.util.Log;
 
 import com.example.myapplication.R;
-import com.example.myapplication.ResponseData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

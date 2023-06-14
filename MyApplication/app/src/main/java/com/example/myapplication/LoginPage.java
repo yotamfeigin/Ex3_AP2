@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.api.LoginAPI;
+import com.example.myapplication.databinding.ActivityLoginPageBinding;
+import com.example.myapplication.databinding.ActivityRegisterPageBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class LoginPage extends AppCompatActivity {
+    private ActivityLoginPageBinding binding;
     private EditText etUsername, etPassword;
     private String Username, Password;
 
@@ -33,11 +36,12 @@ public class LoginPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
+        binding = ActivityLoginPageBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-               Button btnLogin = findViewById(R.id.btnLogin);
+        etUsername = binding.etUsername;
+        etPassword = binding.etPassword;
+        Button btnLogin = binding.btnLogin;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
