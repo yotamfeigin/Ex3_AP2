@@ -32,6 +32,8 @@ public class LoginPage extends AppCompatActivity {
     private EditText etUsername, etPassword;
     private String Username, Password;
 
+    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class LoginPage extends AppCompatActivity {
 
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
+        user = new User("1","username", "password");
         Button btnLogin = binding.btnLogin;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +53,8 @@ public class LoginPage extends AppCompatActivity {
                 Password = etPassword.getText().toString();
 
                 LoginAPI loginApi = new LoginAPI(Username,Password);
-                loginApi.postLogin();
+                loginApi.postLogin(user);
+
             }
         });
     }

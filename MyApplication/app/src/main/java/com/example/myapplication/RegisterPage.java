@@ -31,7 +31,8 @@ public class RegisterPage extends AppCompatActivity {
     private ImageView myImageView;
     private Retrofit retrofit;
     private RegsiterServiceAPI registerServiceAPI;
-    private String username, password, displayName, profilePic, reEnterPassword;
+    private String username, password, displayName, profilePic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +56,11 @@ public class RegisterPage extends AppCompatActivity {
             public void onClick(View v) {
                 username = binding.etUsername.getText().toString();
                 password = binding.etPassword.getText().toString();
-                reEnterPassword = binding.etReEnterPassword.getText().toString();
                 displayName = binding.etDisplayName.getText().toString();
 
                 RegisterAPI registerAPI = new RegisterAPI(username, password, displayName, profilePic);
                 registerAPI.register();
+                finish();
 
             }
         });
