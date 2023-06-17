@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.Entities.User;
 import com.example.myapplication.api.LoginAPI;
 import com.example.myapplication.databinding.ActivityLoginPageBinding;
 import com.example.myapplication.databinding.ActivityRegisterPageBinding;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,30 +31,37 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class LoginPage extends AppCompatActivity {
-    private ActivityLoginPageBinding binding;
-    private EditText etUsername, etPassword;
-    private String Username, Password;
+    private UserRepository userRepository;
+    private String token;
 
-
-    @Override
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityLoginPageBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login_page);
+            Button btnLogin = findViewById(R.id.btnLogin);
+            btnLogin.setOnClickListener( v -> {
+                TextView userName = findViewById(R.id.etUsername);
+                TextView password = findViewById(R.id.etPassword);
+                userRepository = new UserRepository(userName.getText().toString());
+                User u = userRepository.login(userName.getText().toString(), password.getText().toString());
 
-        etUsername = binding.etUsername;
-        etPassword = binding.etPassword;
-        Button btnLogin = binding.btnLogin;
+                if (u != null) {
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Username = etUsername.getText().toString();
-                Password = etPassword.getText().toString();
+                    //FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SingIn.this, instanceIdResult -> {
+                      //  String newtoken = instanceIdResult.getToken();
+                        //userRepository.createToken(newtoken);
 
-                LoginAPI loginApi = new LoginAPI(Username,Password);
-                loginApi.postLogin();
-            }
-        });
-    }
+                    //});
+                    //Intent i = new Intent(this, ContactsList.class);
+                    //i.putExtra("userName",userName.getText().toString());
+                    //startActivity(i);
+                //} else {
+                  //  Intent i = new Intent(this, loginError.class);
+                    //startActivity(i);
+                }
+
+            });
+        }
+
+
 }
