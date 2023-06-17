@@ -47,17 +47,19 @@ public class LoginPage extends AppCompatActivity {
 
                 if (u != null) {
 
-                    //FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SingIn.this, instanceIdResult -> {
-                      //  String newtoken = instanceIdResult.getToken();
-                        //userRepository.createToken(newtoken);
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginPage.this, instanceIdResult -> {
+                        String NewToken = instanceIdResult.getToken();
+                        userRepository.createToken(NewToken);
 
-                    //});
-                    //Intent i = new Intent(this, ContactsList.class);
-                    //i.putExtra("userName",userName.getText().toString());
-                    //startActivity(i);
-                //} else {
-                  //  Intent i = new Intent(this, loginError.class);
-                    //startActivity(i);
+                    });
+                    //   Intent i = new Intent(this, ContactsList.class);
+                   // i.putExtra("userName",userName.getText().toString());
+                   // startActivity(i);
+                } else {
+                    Toast.makeText(LoginPage.this, "Error logging in", Toast.LENGTH_SHORT).show();
+
+                    //  Intent i = new Intent(this, loginError.class);
+                   // startActivity(i);
                 }
 
             });
