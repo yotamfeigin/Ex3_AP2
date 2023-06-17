@@ -18,10 +18,10 @@ public class User {
     private String displayName;
     private String profilePicture;
 
-    public User(String username, String password, String name) {
+    public User(String username, String password, String displayName) {
         this.username = username;
         this.password = password;
-        this.displayName = name;
+        this.displayName = displayName;
     }
 
     public String getUsername() {
@@ -41,7 +41,7 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
+    public String getDisplayName() {
         return displayName;
     }
 
