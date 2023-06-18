@@ -6,15 +6,11 @@ import androidx.room.Query;
 
 import com.example.myapplication.entities.User;
 
-import java.util.List;
-
 @Dao
 public interface UserDao {
-    @Query("SELECT * FROM user")
-    List<User> index();
 
-    @Query("SELECT * FROM user WHERE id = :id")
-    User get(int id);
+    @Query("SELECT * FROM user")
+    User getCurrentUser();
 
     @Insert
     void insert(User... users);

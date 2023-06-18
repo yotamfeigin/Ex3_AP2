@@ -1,11 +1,11 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.api.LoginAPI;
 import com.example.myapplication.databinding.ActivityLoginPageBinding;
@@ -22,12 +22,14 @@ public class LoginPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityLoginPageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
-        user = new User("1","username", "password");
+        user = new User(etUsername.getText().toString(),null
+                , null);
         Button btnLogin = binding.btnLogin;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
