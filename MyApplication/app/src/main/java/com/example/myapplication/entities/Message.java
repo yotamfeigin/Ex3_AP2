@@ -1,18 +1,19 @@
 package com.example.myapplication.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
-
-import java.util.Date;
 
 @Entity(primaryKeys = {"chatId", "messageId"})
 public class Message {
+@NonNull
     private String chatId;
+@NonNull
     private int messageId;
-    private Date created;
+    private String created;
     private String sender_username;
     private String content;
 
-    public Message(String chatId, int messageId, Date created, String sender_username, String content) {
+    public Message(String chatId, int messageId, String created, String sender_username, String content) {
         this.chatId = chatId;
         this.messageId = messageId;
         this.created = created;
@@ -28,11 +29,11 @@ public class Message {
         return messageId;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 

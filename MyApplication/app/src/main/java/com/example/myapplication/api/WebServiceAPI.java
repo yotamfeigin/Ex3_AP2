@@ -1,6 +1,6 @@
 package com.example.myapplication.api;
 
-import com.example.myapplication.User;
+import com.example.myapplication.entities.User;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;

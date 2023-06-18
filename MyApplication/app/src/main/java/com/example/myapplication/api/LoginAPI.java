@@ -4,8 +4,7 @@ import android.util.Log;
 
 
 import com.example.myapplication.R;
-import com.example.myapplication.Token;
-import com.example.myapplication.User;
+import com.example.myapplication.entities.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
