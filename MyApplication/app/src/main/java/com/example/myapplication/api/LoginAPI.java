@@ -2,11 +2,14 @@ package com.example.myapplication.api;
 
 import android.util.Log;
 
-
 import com.example.myapplication.R;
+import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginAPI {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
+
+    private ChatAPI chatAPI;
     private String username;
     private String password;
     private String token;
@@ -30,6 +35,7 @@ public class LoginAPI {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
+        chatAPI = new ChatAPI(webServiceAPI);
     }
 
     public void postLogin(User user) {
@@ -50,8 +56,8 @@ public class LoginAPI {
                         token = jsonString;
                         Log.d("token", token);
                         getUser(user);
-                        // Handle the JSON object response
-                        // ...
+                        ArrayList<Chat> chats = new ArrayList<>();
+
                     } else {
                         // Handle unsuccessful response
                         Log.e("LoginAPI", "Response error: " + response.code());
@@ -82,6 +88,8 @@ public class LoginAPI {
                     user.setDisplayName(userResponse.getDisplayName());
                     user.setPassword(password);
                     user.setProfilePic(userResponse.getProfilePic());
+                    List<Chat> chats = new ArrayList<>();
+                    chatAPI.getChats(user, chats);
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
@@ -98,4 +106,7 @@ public class LoginAPI {
 
     }
 
+
 }
+
+
