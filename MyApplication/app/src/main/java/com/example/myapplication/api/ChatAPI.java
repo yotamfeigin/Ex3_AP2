@@ -14,9 +14,11 @@ import retrofit2.Response;
 
 public class ChatAPI {
     private WebServiceAPI webServiceAPI;
+    private MessageAPI messageAPI;
 
     public ChatAPI(WebServiceAPI webServiceAPI) {
         this.webServiceAPI = webServiceAPI;
+        this.messageAPI = new MessageAPI(webServiceAPI);
     }
 
     public void getChats(User user, List<Chat> chats) {
@@ -29,7 +31,9 @@ public class ChatAPI {
                 if (response.isSuccessful()) {
                     List<ChatRet> userResponse = response.body();
                     Log.d("ChatRet", userResponse.toString());
-
+                    for (ChatRet chat : userResponse) {
+                        messageAPI.get(user, chat.getId());
+                    }
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
