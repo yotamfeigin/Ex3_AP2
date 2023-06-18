@@ -7,10 +7,13 @@ import androidx.room.Room;
 import com.example.myapplication.R;
 import com.example.myapplication.db.ChatDB;
 import com.example.myapplication.db.UserDB;
+import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import retrofit2.Call;
@@ -18,10 +21,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.HEAD;
 
 public class LoginAPI {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
+
+    private ChatAPI chatAPI;
     private String username;
     private String password;
     private UserDB userDB;
@@ -41,6 +47,7 @@ public class LoginAPI {
                 .build();
         chatDB = Room.databaseBuilder(MyApplication.context, ChatDB.class, "chat-db").fallbackToDestructiveMigration()
                 .build();
+        chatAPI = new ChatAPI(webServiceAPI);
     }
 
     public void postLogin(User user) {
@@ -63,6 +70,7 @@ public class LoginAPI {
                         getUser(user, token);
                         // Handle the JSON object response
                         // ...
+
                     } else {
                         // Handle unsuccessful response
                         Log.e("LoginAPI", "Response error: " + response.code());
@@ -91,7 +99,6 @@ public class LoginAPI {
                     user.setUsername(userResponse.getUsername());
                     user.setToken(token);
                     user.setDisplayName(userResponse.getDisplayName());
-                    user.setPassword(password);
                     user.setProfilePic(userResponse.getProfilePic());
 
                     // Save the user to Room
@@ -99,6 +106,8 @@ public class LoginAPI {
                         userDB.UserDao().insert(user);
 
                     });
+                    List<Chat> chats = new ArrayList<>();
+                    chatAPI.getChats(user, chats);
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
@@ -116,4 +125,7 @@ public class LoginAPI {
 
     }
 
+
 }
+
+

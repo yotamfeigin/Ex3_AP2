@@ -1,7 +1,10 @@
 package com.example.myapplication.api;
 
 import com.example.myapplication.entities.User;
+import com.example.myapplication.objects.ChatRet;
 import com.google.gson.JsonObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -18,6 +21,10 @@ public interface WebServiceAPI {
 
     @GET("Users/{username}")
     Call<User> getUser(@Path("username") String username, @Header("Authorization") String token );
+
+    @GET("Chats")
+    Call<List<ChatRet>> getChats(@Header("Authorization") String token );
+
 
 }
 
