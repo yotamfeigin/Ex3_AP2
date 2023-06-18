@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
+import com.example.myapplication.objects.ChatRet;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -88,8 +89,9 @@ public class LoginAPI {
                     user.setDisplayName(userResponse.getDisplayName());
                     user.setPassword(password);
                     user.setProfilePic(userResponse.getProfilePic());
-                    List<Chat> chats = new ArrayList<>();
+                    List<ChatRet> chats = new ArrayList<>();
                     chatAPI.getChats(user, chats);
+                    Log.d("CHATS:", chats.toString());
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

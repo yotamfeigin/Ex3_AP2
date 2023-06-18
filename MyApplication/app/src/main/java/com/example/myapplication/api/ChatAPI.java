@@ -2,10 +2,10 @@ package com.example.myapplication.api;
 
 import android.util.Log;
 
-import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.objects.ChatRet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -16,12 +16,15 @@ public class ChatAPI {
     private WebServiceAPI webServiceAPI;
     private MessageAPI messageAPI;
 
+    private List<ChatRet> chat1;
+
     public ChatAPI(WebServiceAPI webServiceAPI) {
         this.webServiceAPI = webServiceAPI;
         this.messageAPI = new MessageAPI(webServiceAPI);
+        this.chat1 = new ArrayList<>();
     }
 
-    public void getChats(User user, List<Chat> chats) {
+    public void getChats(User user, List<ChatRet> chats) {
 
 
         Call<List<ChatRet>> call = webServiceAPI.getChats("Bearer " + user.getToken());
@@ -33,6 +36,7 @@ public class ChatAPI {
                     Log.d("ChatRet", userResponse.toString());
                     for (ChatRet chat : userResponse) {
                         messageAPI.get(user, chat.getId());
+                        chat1.add(chat);
                     }
                 } else {
                     // Handle error cases for GET request
