@@ -1,11 +1,13 @@
 package com.example.myapplication.objects;
 
+import com.example.myapplication.entities.User;
+
 public class ChatRet {
     private String id;
-    private UserRet user;
+    private User user;
     private LastMessage lastMessage;
 
-    public ChatRet(String id, UserRet user, LastMessage lastMessage) {
+    public ChatRet(String id, User user, LastMessage lastMessage) {
         this.id = id;
         this.user = user;
         this.lastMessage = lastMessage;
@@ -19,11 +21,11 @@ public class ChatRet {
         this.id = id;
     }
 
-    public UserRet getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserRet user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
