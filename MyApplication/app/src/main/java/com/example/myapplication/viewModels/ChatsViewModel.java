@@ -1,36 +1,39 @@
 package com.example.myapplication.viewModels;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.entities.Chat;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.objects.ChatRet;
 import com.example.myapplication.repository.ChatsRepository;
 
 import java.util.List;
 
-public class ChatsViewModel {
+public class ChatsViewModel extends ViewModel {
 
-    private LiveData<List<ChatRet>> chats;
+    private MutableLiveData<List<Chat>> chats;
     private ChatsRepository chatsRepository;
 
-    public ContactViewModel() {
+    public ChatsViewModel(User currentUser) {
         super();
-        contactsRepository = new ChatsRepository();
-        contacts = contactsRepository.getAll();
+        chatsRepository = new ChatsRepository(currentUser);
+        chats = chatsRepository.getAll();
     }
 
-    public LiveData<List<ChatRet>> getChats() {
-        contactsRepository.getAll();
+    public MutableLiveData<List<Chat>> getChats() {
+        chatsRepository.getAll();
         return chats;
     }
 
-    public void insert (ChatRet c) {
+    public void insert (Chat c) {
         chatsRepository.add(c);
         chats = chatsRepository.getAll();
     }
 
-    public ChatRet getContact(String id) {
-        return chatsRepository.get(id, userActive);
+    public Chat getChat(String id) {
+        return chatsRepository.get(id);
     }
 
 }
-}
+
