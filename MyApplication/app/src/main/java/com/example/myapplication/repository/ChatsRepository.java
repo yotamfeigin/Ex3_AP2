@@ -55,12 +55,10 @@ public class ChatsRepository {
 
 
     public void add (final Chat chat){
-        chatDao.insert(chat);
         chatApi.add(chat);
     }
 
     public void delete (final Chat chat){
-        chatDao.delete(chat);
         chatApi.delete(chat);
     }
 
