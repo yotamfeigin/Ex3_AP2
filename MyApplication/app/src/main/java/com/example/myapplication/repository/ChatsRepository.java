@@ -49,9 +49,9 @@ public class ChatsRepository {
 
 
 
-    public void add (final Contact contact){
-        contactsDao.insert(contact);
-        contactsApi.add(contact);
+    public void add (final ChatRet chatRet){
+       ChatRet.insert(chatRet);
+        chatsApi.add(chatRet);
     }
 
     public void delete (final Contact contact){
