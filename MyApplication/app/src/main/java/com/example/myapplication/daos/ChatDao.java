@@ -13,10 +13,10 @@ import java.util.List;
 public interface ChatDao {
 
     @Query("SELECT * FROM chat")
-    List<Chat> index();
+    List<Chat> getAll();
 
     @Query("SELECT * FROM chat WHERE id = :chatId")
-    Chat getChat(int chatId);
+    Chat getChat(String chatId);
 
     @Insert
     void insert(Chat... chats);
