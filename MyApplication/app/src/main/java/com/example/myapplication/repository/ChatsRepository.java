@@ -9,7 +9,6 @@ import com.example.myapplication.daos.ChatDao;
 import com.example.myapplication.db.ChatDB;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
-import com.example.myapplication.objects.ChatRet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ChatsRepository {
         chatDao = chatDB.ChatDao();
         chatsListData = new ChatsListData();
         currentUser = currentUser;
-        chatApi = new ChatAPI(currentUser,chatDao,chatsListData);
+        chatApi = new ChatAPI(currentUser,chatsListData,chatDao);
         chatApi.getChats();
     }
 
@@ -66,4 +65,4 @@ public class ChatsRepository {
 
 
 }
-}
+

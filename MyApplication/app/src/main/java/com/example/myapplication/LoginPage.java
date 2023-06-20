@@ -1,13 +1,19 @@
 package com.example.myapplication;
 
+import static android.os.SystemClock.sleep;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.activites.ChatsPage;
 import com.example.myapplication.api.LoginAPI;
+import com.example.myapplication.callback.LoginCallback;
 import com.example.myapplication.databinding.ActivityLoginPageBinding;
 import com.example.myapplication.entities.User;
 
@@ -39,7 +45,26 @@ public class LoginPage extends AppCompatActivity {
                 Password = etPassword.getText().toString();
 
                 LoginAPI loginApi = new LoginAPI(Username,Password);
-                loginApi.postLogin(user);
+                loginApi.postLogin(user, new LoginCallback() {
+                    @Override
+                    public void onLoginSuccess(User user) {
+                        // User has been updated after the login
+                        Log.d("User", user.getUsername());
+                        sleep(2000);
+                        Log.d("User", user.getUsername());
+                        Intent intent = new Intent(LoginPage.this, ChatsPage.class);
+                        User test = new User("tal1", "logo.jpg", "Tal");
+                        intent.putExtra("USER_OBJECT", user);
+                        Log.d("User", user.getUsername());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLoginFailure(Throwable throwable) {
+                        // Handle login failure
+                        throwable.printStackTrace();
+                    }
+                });
 
             }
         });
