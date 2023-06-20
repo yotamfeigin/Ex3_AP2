@@ -1,7 +1,5 @@
 package com.example.myapplication.Entities;
 
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

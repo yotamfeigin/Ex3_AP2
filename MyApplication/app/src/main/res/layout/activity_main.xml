@@ -35,22 +35,43 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:gravity="center">
+        android:gravity="center"
+       > <!-- Set the buttons container to initially invisible -->
 
         <Button
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Login" />
+            android:text="Login"
+            android:background="@drawable/underline_text_view"
+
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Register" />
+            android:text="Register"
+            android:background="@drawable/underline_text_view"
+
+            android:visibility="invisible"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:text="Settings"
+        android:background="@drawable/underline_text_view"
+
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

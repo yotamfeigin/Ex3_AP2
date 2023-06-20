@@ -1,17 +1,14 @@
 package com.example.myapplication.api;
 
+import static com.example.myapplication.api.MyApplication.context;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.myapplication.Daos.UserDao;
 import com.example.myapplication.Entities.User;
 import com.example.myapplication.R;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -29,8 +26,11 @@ public class LoginAPI {
     public LoginAPI(UserDao userDao, String userActive) {
         this.userActive = userActive;
         this.userDao = userDao;
+
+        SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
+        String BaseUrl = SharedPreferences.getString("BaseUrl","");
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceApi = retrofit.create(WebServiceAPI.class);
