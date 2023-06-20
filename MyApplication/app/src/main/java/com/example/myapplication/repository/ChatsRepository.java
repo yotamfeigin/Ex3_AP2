@@ -16,7 +16,6 @@ import java.util.List;
 public class ChatsRepository {
     private ChatDB chatDB;
     private ChatDao chatDao;
-    private User currentUser;
     private ChatsListData chatsListData;
     private ChatAPI chatApi;
 
@@ -25,7 +24,6 @@ public class ChatsRepository {
         chatDB= Room.databaseBuilder(MyApplication.context, ChatDB .class, "chatDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         chatDao = chatDB.ChatDao();
         chatsListData = new ChatsListData();
-        currentUser = currentUser;
         chatApi = new ChatAPI(currentUser,chatsListData,chatDao);
         chatApi.getChats();
     }
