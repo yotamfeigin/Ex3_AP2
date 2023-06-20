@@ -28,6 +28,10 @@ public class ChatsRepository {
         chatApi.getChats();
     }
 
+    public Chat getByName(String contactUserName) {
+        return chatDao.getChatUser(contactUserName);
+    }
+
     class ChatsListData extends MutableLiveData<List<Chat>> {
         public ChatsListData() {
             super();

@@ -32,7 +32,7 @@ public class MessagesRepository {
         dataBase = Room.databaseBuilder(MyApplication.context, MessageDB.class, "MessagesDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         dao = dataBase.messageDao();
         messageListData = new MessageListData();
-        api = new MessageAPI(messageListData, dao, chat.getId(),chat, stringId, userActive);
+        api = new MessageAPI(messageListData, dao, chat.getId(),chat, userActive);
         api.get();
     }
 
@@ -64,12 +64,12 @@ public class MessagesRepository {
     }
 
     public void add (Message msg){
-        api.add(msg);
+        api.post(msg);
     }
 
-    public void delete (final Message msg){
-        api.delete(msg);
-    }
+//    public void delete (final Message msg){
+//        api.delete(msg);
+//    }
 
     public void reload(){
         dao.index();

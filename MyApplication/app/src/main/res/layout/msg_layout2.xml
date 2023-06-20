@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:layout_gravity="start"
         android:padding="3dp"
-        android:background="green">
+        >
 
         <TextView
             android:id="@+id/singleMsg"

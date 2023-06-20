@@ -35,5 +35,8 @@ public class ChatsViewModel extends ViewModel {
         return chatsRepository.get(id);
     }
 
+    public Chat getContact(String contactUserName) {
+        return chatsRepository.getByName(contactUserName);
+    }
 }
 

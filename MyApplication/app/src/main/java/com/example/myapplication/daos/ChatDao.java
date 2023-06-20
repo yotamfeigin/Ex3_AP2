@@ -18,6 +18,9 @@ public interface ChatDao {
     @Query("SELECT * FROM chat WHERE id = :chatId")
     Chat getChat(String chatId);
 
+    @Query("SELECT * FROM chat WHERE username= :contactUserName")
+    Chat getChatUser(String contactUserName);
+
     @Insert
     void insert(Chat... chats);
 
