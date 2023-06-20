@@ -26,14 +26,9 @@ public class AddContact extends AppCompatActivity {
         Button buttonAddContact = findViewById(R.id.buttonAddContact);
         buttonAddContact.setOnClickListener( v -> {
             TextView userName = findViewById(R.id.addContact_userName);
-
-                Chat newChat = new Chat(userName.getText().toString(),nickName.getText().toString(),
-                        server.getText().toString(),userActive);
-                contactViewModel.insert(contact);
-
+            chatsViewModel.insert(userName.getText().toString());
             finish();
         });
-
         Button buttonExit = findViewById(R.id.buttonExit);
         buttonExit.setOnClickListener( v -> {
             finish();
