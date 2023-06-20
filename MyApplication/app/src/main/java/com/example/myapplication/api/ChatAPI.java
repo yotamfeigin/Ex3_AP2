@@ -78,8 +78,8 @@ public class ChatAPI {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    dao.deleteAll();
-                    dao.getAll();
+                   dao.deleteAll();
+                   getChats();
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
