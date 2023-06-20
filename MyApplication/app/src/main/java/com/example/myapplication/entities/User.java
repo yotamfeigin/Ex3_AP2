@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.myapplication.objects.UserRet;
+
+import java.io.Serializable;
+
 @Entity
-public class User {
+public class User implements Serializable {
     @PrimaryKey (autoGenerate = true)
     @NonNull
     private int id;
@@ -19,6 +23,12 @@ public class User {
         this.username = username;
         this.profilePic = profilePic;
         this.displayName = displayName;
+    }
+
+    public User(UserRet copy) {
+        this.username = copy.getUsername();
+        this.profilePic = copy.getProfilePic();
+        this.displayName = copy.getDisplayName();
     }
 
     public void setId(int id) {

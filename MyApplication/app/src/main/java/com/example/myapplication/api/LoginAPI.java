@@ -5,19 +5,12 @@ import android.util.Log;
 import androidx.room.Room;
 
 import com.example.myapplication.R;
-import com.example.myapplication.db.ChatDB;
-import com.example.myapplication.db.MessageDB;
+import com.example.myapplication.callback.LoginCallback;
 import com.example.myapplication.db.UserDB;
-import com.example.myapplication.entities.Chat;
-import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.User;
-import com.example.myapplication.interfaces.ChatCallback;
-import com.example.myapplication.objects.ChatRet;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 import retrofit2.Call;
@@ -30,12 +23,9 @@ public class LoginAPI {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
 
-    private ChatAPI chatAPI;
     private String username;
     private String password;
     private UserDB userDB;
-    private ChatDB chatDB;
-    private MessageDB messageDB;
 
     public LoginAPI(String username, String password) {
         this.username = username;
@@ -46,16 +36,12 @@ public class LoginAPI {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
-        userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db").fallbackToDestructiveMigration()
+        userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
+                .fallbackToDestructiveMigration()
                 .build();
-        chatDB = Room.databaseBuilder(MyApplication.context, ChatDB.class, "chat-db").fallbackToDestructiveMigration()
-                .build();
-        messageDB = Room.databaseBuilder(MyApplication.context, MessageDB.class, "message-db").fallbackToDestructiveMigration()
-                .build();
-        chatAPI = new ChatAPI(webServiceAPI);
     }
 
-    public void postLogin(User user) {
+    public void postLogin(User user, LoginCallback callback) {
         try {
             Call<JsonObject> call = webServiceAPI.postLogin(username, password);
             String url = call.request().url().toString(); // Get the URL from the request
@@ -72,12 +58,13 @@ public class LoginAPI {
                         String jsonString = gson.toJson(responseObject);
                         String token = jsonString;
                         Log.d("token", token);
-                        getUser(user, token);
+                        user.setToken(token);
+                        getUser(user, token, callback);
                         // Handle the JSON object response
                         // ...
 
                     } else {
-                        // Handle unsuccessful response
+                        callback.onLoginFailure(new Throwable("Login failed"));
                         Log.e("LoginAPI", "Response error: " + response.code());
                     }
                 }
@@ -93,7 +80,7 @@ public class LoginAPI {
         }
     }
 
-    public void getUser(User user, String token) {
+    public void getUser(User user, String token, LoginCallback callback) {
         Call<User> call = webServiceAPI.getUser(username, "Bearer " + token);
         call.enqueue(new Callback<User>() {
             @Override
@@ -102,22 +89,19 @@ public class LoginAPI {
                     User userResponse = response.body();
                     Log.d("userResponse", userResponse.toString());
                     user.setUsername(userResponse.getUsername());
-                    user.setToken(token);
                     user.setDisplayName(userResponse.getDisplayName());
                     user.setProfilePic(userResponse.getProfilePic());
-                    List<ChatRet> chats = new ArrayList<>();
-                    chatAPI.getChats(user, chats);
-                    Log.d("CHATS:", chats.toString());
-
                     // Save the user to Room
                     Executors.newSingleThreadExecutor().execute(() -> {
                         userDB.UserDao().insert(user);
-                        fetchChatsAndMessages(user);
+                        callback.onLoginSuccess(user); // Invoke the callback method
                     });
+
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
                     // Display error message or handle accordingly
+                    callback.onLoginFailure(new Throwable(errorMessage)); // Invoke the callback method
                 }
             }
 
@@ -125,33 +109,8 @@ public class LoginAPI {
             public void onFailure(Call<User> call, Throwable t) {
                 // Handle failure cases
                 t.printStackTrace();
+                callback.onLoginFailure(t); // Invoke the callback method
             }
         });
     }
-
-    private void fetchChatsAndMessages(User user) {
-        chatAPI.getChats(user, new ChatCallback() {
-            @Override
-            public void onChatsFetched(List<Chat> fetchedChats) {
-                // Insert chats into Room
-                for (Chat chat : fetchedChats) {
-                    chatDB.ChatDao().insert(chat);
-                }
-                // Iterate over the fetched chats and fetch and insert the messages
-                for (Chat chat : fetchedChats) {
-                    List<Message> messages = fetchMessages(chat.getId());
-                    for (Message msg : messages) {
-                        messageDB.messageDao().insert(msg);
-                    }
-                }
-            }
-
-            @Override
-            public void onChatsFetchFailure(Throwable t) {
-                // Handle chat fetch failure
-            }
-        });
-    }
-
-
 }

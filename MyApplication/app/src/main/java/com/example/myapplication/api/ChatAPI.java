@@ -18,6 +18,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class ChatAPI {
 
 
@@ -51,6 +52,7 @@ public class ChatAPI {
                 if (response.isSuccessful()) {
                     List<ChatRet> userResponse = response.body();
                     Log.d("ChatRet", userResponse.toString());
+                    dao.deleteAll();
                     for (ChatRet chat : userResponse) {
                         Chat c = new Chat(chat.getId(), chat.getUser(), chat.getLastMessage());
                         dao.insert(c);

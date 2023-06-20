@@ -9,7 +9,6 @@ import com.example.myapplication.daos.ChatDao;
 import com.example.myapplication.db.ChatDB;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
-import com.example.myapplication.objects.ChatRet;
 
 import java.util.ArrayList;
 import java.util.List;
