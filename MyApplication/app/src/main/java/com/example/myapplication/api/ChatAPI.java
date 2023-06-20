@@ -72,13 +72,14 @@ public class ChatAPI {
         });
     }
 
-    public void add(Chat chat) {
-        Call<Void> call = api.newChat(user.getToken(), chat.getUser().getUsername());
+    public void add(String username) {
+        Call<Void> call = api.newChat(user.getToken(), username);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                   dao.insert(chat);
+                   dao.deleteAll();
+                   getChats();
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

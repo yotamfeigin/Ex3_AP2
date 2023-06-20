@@ -2,7 +2,6 @@ package com.example.myapplication.adaptes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.entities.Message;
-import com.example.namespace.R;
 
 import java.util.List;
 
@@ -36,8 +36,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     private final LayoutInflater mInflate;
     private List<Message> messages;
 
-    public MessagesAdapter(Context context) {
+    public MessagesAdapter(Context context, List<Message> messages) {
         mInflate = LayoutInflater.from(context);
+        this.messages = messages;
     }
 
     @NonNull

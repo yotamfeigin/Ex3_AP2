@@ -91,7 +91,12 @@ public class ChatsPage extends AppCompatActivity {
 
     private void setOnClickListener() {
         listener = contact -> {
-            Log.d("Listener", "setOnClickListener: ");
+            Intent i = new Intent(this, Messages.class);
+            i.putExtra("USER_OBJECT1", user);
+            i.putExtra("USER_OBJECT2", contact.getUser());
+            i.putExtra("chatId", contact.getId());
+            startActivity(i);
+
         };
     }
 
