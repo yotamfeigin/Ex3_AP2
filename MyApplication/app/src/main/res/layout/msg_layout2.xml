@@ -10,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="end"
+        android:layout_gravity="start"
         android:padding="3dp"
-        android:background="blue">
+        android:background="green">
 
         <TextView
             android:id="@+id/singleMsg"
