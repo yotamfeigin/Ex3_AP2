@@ -11,6 +11,7 @@ import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.objects.MessageRet;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -76,13 +77,15 @@ public class MessageAPI {
     }
 
 
-    public void post(Message msg) {
-        Call<Void> call = api.sendMessage(msg.getContent(), chatId, userActive.getToken());
+    public void post(String msg) {
+        JsonObject body = new JsonObject();
+        body.addProperty("msg", msg);
+        Call<Void> call = api.sendMessage(body, chatId, "Bearer " + userActive.getToken());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    dao.insert(msg);
+                    get();
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

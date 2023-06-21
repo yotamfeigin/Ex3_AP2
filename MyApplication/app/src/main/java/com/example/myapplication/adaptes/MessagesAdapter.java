@@ -60,7 +60,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             holder.singleMsg.setText(current.getContent());
             Log.d("TAG",user.getUsername() );
             Log.d("TAG2",current.getSender_username() );
-            if(user.getUsername().equals(current.getSender_username())) {
+            if(!user.getUsername().equals(current.getSender_username())) {
                 Log.d("TAG2","Fuck!" );
                 holder.linearLayout.setBackgroundColor(0xFF6610F2);
 

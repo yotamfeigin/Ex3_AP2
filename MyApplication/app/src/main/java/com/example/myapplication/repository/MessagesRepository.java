@@ -63,7 +63,7 @@ public class MessagesRepository {
         return messageListData;
     }
 
-    public void add (Message msg){
+    public void add (String msg){
         api.post(msg);
     }
 

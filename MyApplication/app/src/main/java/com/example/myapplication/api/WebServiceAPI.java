@@ -43,7 +43,8 @@ public interface WebServiceAPI {
     @GET("Chats/{chatId}/Messages")
     Call<List<MessageRet>> getMessages(@Path("chatId") String chatId, @Header("Authorization") String token );
 
-    @POST("Messages/{chatId}/Messages")
-    Call<Void> sendMessage(@Body() String msg, @Header("Authorization") String token, @Path("chatId") String chatId);
+    @POST("Chats/{chatId}/Messages")
+    Call<Void> sendMessage(@Body JsonObject body, @Path("chatId") String chatId, @Header("Authorization") String token);
+
 }
 
