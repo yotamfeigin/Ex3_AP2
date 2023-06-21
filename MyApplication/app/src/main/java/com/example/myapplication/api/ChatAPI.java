@@ -56,8 +56,8 @@ public class ChatAPI {
                         Chat c = new Chat(chat.getId(), chat.getUser(), chat.getLastMessage());
                         dao.insert(c);
                     }
-                    // Notify observers that the chat list has been updated
-                    chats.setValue(dao.getAll());
+                    chats.postValue(dao.getAll());
+
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

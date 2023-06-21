@@ -37,7 +37,7 @@ public class MessageViewModel extends ViewModel {
         return messagesRepository.getContactMessages();
     }
 
-    public void add(Message msg){
+    public void add(String msg){
         messagesRepository.add(msg);
     }
 

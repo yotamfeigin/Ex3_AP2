@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
-import com.example.myapplication.objects.ChatRet;
 import com.example.myapplication.repository.ChatsRepository;
 
 import java.util.List;
@@ -27,8 +26,10 @@ public class ChatsViewModel extends ViewModel {
         return chats;
     }
 
-    public void insert (String username) {
-        chatsRepository.add(username);
+
+    public void insert (String name) {
+        chatsRepository.add(name);
+
         chats = chatsRepository.getAll();
     }
 

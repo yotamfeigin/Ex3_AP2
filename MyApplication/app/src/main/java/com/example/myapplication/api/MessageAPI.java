@@ -1,5 +1,6 @@
 package com.example.myapplication.api;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -10,7 +11,9 @@ import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.objects.MessageRet;
+import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,42 +47,45 @@ public class MessageAPI {
 
 
     public void get() {
-        Call<List<MessageRet>> call = api.getMessages(chatId, "Bearer " + userActive.getToken());
-        call.enqueue(new Callback<List<MessageRet>>() {
+        AsyncTask.execute(new Runnable() {
             @Override
-            public void onResponse(Call<List<MessageRet>> call, Response<List<MessageRet>> response) {
-                if (response.isSuccessful()) {
-                    List<MessageRet> userResponse = response.body();
-                    Log.d("MessagesRet", userResponse.toString());
-                    dao.deleteAll();
-                    for(MessageRet m : userResponse){
-                        Message n = new Message(chatId,m.getId(), m.getCreated(), m.getSender().getUsername(), m.getContent());
-                        dao.insert(n);
-                    }
+            public void run() {
+                Call<List<MessageRet>> call = api.getMessages(chatId, "Bearer " + userActive.getToken());
+                try {
+                    Response<List<MessageRet>> response = call.execute();
+                    if (response.isSuccessful()) {
+                        List<MessageRet> userResponse = response.body();
+                        Log.d("MessagesRet", userResponse.toString());
+                        dao.deleteAll();
+                        for(MessageRet m : userResponse){
+                            Message n = new Message(chatId, m.getId(), m.getCreated(), m.getSender().getUsername(), m.getContent());
+                            dao.insert(n);
 
-                } else {
-                    // Handle error cases for GET request
-                    String errorMessage = "Error: " + response.code();
-                    // Display error message or handle accordingly
+                        }
+                        messages.postValue(dao.get(chatId));
+                    } else {
+                        // Handle error cases for GET request
+                        String errorMessage = "Error: " + response.code();
+                        // Display error message or handle accordingly
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Handle IO exception
                 }
             }
-
-            @Override
-            public void onFailure(Call<List<MessageRet>> call, Throwable t) {
-                // Handle failure cases
-                t.printStackTrace();
-            }
         });
-
     }
 
-    public void post(Message msg) {
-        Call<Void> call = api.sendMessage(msg.getContent(), chatId, userActive.getToken());
+
+    public void post(String msg) {
+        JsonObject body = new JsonObject();
+        body.addProperty("msg", msg);
+        Call<Void> call = api.sendMessage(body, chatId, "Bearer " + userActive.getToken());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    dao.insert(msg);
+                    get();
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

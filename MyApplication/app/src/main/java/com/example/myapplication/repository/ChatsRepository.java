@@ -55,8 +55,10 @@ public class ChatsRepository {
 
 
 
-    public void add (final String userName){
-        chatApi.add(userName);
+    public void add (String name){
+        chatApi.add(name);
+
+
     }
 
     public void delete (final Chat chat){

@@ -3,6 +3,7 @@ package com.example.myapplication.activites;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,11 +36,13 @@ public class Messages extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_massages);
 
+
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT1");
         otherUser = (User) myIntent.getSerializableExtra("USER_OBJECT2");
         chatId = myIntent.getStringExtra("chatId");
         messages = new ArrayList<>();
+
         recyclerView = findViewById(R.id.lstMsg);
         setAdapter();
 
@@ -49,12 +52,19 @@ public class Messages extends AppCompatActivity {
             adapter.setMessages(contactEntities);
         });
 
+        ImageButton sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        sendMessageBtn.setOnClickListener(v -> {
+            sendMessage();
+        });
+
+
         setUserInfo();
+
     }
 
     private void setAdapter() {
         if (recyclerView != null) {
-            adapter = new MessagesAdapter(this, messages);
+            adapter = new MessagesAdapter(this, messages, user);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -65,9 +75,15 @@ public class Messages extends AppCompatActivity {
     }
 
     private void setUserInfo () {
-        messages = model.getContactMessages().getValue();
         TextView user_name_chat = findViewById(R.id.user_name_chat);
         user_name_chat.setText(otherUser.getDisplayName());
 
+
+    }
+
+    private void sendMessage(){
+        TextView content = findViewById(R.id.editTextChat);
+        model.add(content.getText().toString());
+        content.setText("");
     }
 }

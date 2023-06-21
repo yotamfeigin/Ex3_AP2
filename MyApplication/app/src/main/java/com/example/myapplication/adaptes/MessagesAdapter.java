@@ -2,6 +2,7 @@ package com.example.myapplication.adaptes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Message;
+import com.example.myapplication.entities.User;
 
 import java.util.List;
 
@@ -35,10 +37,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     private final LayoutInflater mInflate;
     private List<Message> messages;
+    private User user;
 
-    public MessagesAdapter(Context context, List<Message> messages) {
+    public MessagesAdapter(Context context, List<Message> messages, User user) {
         mInflate = LayoutInflater.from(context);
         this.messages = messages;
+        this.user = user;
     }
 
     @NonNull
@@ -54,8 +58,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         if(messages != null){
             final Message current = messages.get(position);
             holder.singleMsg.setText(current.getContent());
+            Log.d("TAG",user.getUsername() );
+            Log.d("TAG2",current.getSender_username() );
+            if(!user.getUsername().equals(current.getSender_username())) {
+                Log.d("TAG2","Fuck!" );
+                holder.linearLayout.setBackgroundColor(0xFF6610F2);
+
+            }
             holder.msgTime.setText(current.getCreated());
-                //holder.linearLayout.setBackgroundResource(R.drawable.msg_color_2);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.weight = 1.0f;
                 params.gravity = Gravity.START;
