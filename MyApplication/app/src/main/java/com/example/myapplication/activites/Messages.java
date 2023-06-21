@@ -58,7 +58,7 @@ public class Messages extends AppCompatActivity {
 
     private void setAdapter() {
         if (recyclerView != null) {
-            adapter = new MessagesAdapter(this, messages);
+            adapter = new MessagesAdapter(this, messages, user);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
