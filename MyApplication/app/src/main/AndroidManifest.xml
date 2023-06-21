@@ -17,6 +17,8 @@
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name="com.example.myapplication.activites.AddContact" />
+
         <activity
             android:name=".activites.Messages"
             android:exported="false" />

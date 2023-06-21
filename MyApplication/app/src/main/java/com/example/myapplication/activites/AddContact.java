@@ -7,10 +7,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.entities.Chat;
+import com.example.myapplication.R;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.viewModels.ChatsViewModel;
-import com.example.namespace.R;
 
 public class AddContact extends AppCompatActivity {
 
