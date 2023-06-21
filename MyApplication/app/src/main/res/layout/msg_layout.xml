@@ -12,6 +12,7 @@
         android:orientation="horizontal"
         android:layout_gravity="end"
         android:padding="3dp"
+        android:background="@drawable/msg_backgroun"
         >
 
         <TextView

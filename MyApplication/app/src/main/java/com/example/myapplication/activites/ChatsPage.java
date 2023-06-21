@@ -2,7 +2,10 @@ package com.example.myapplication.activites;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -105,6 +108,10 @@ public class ChatsPage extends AppCompatActivity {
         TextView tvMyName = findViewById(R.id.tvMyName);
         ImageView ivMyPic = findViewById(R.id.ivMyPic);
         tvMyName.setText(user.getDisplayName());
-
+        // Set the image from Base64 string
+        String base64Image =user.getProfilePic();
+        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+        Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        ivMyPic.setImageBitmap(decodedBitmap);
     }
 }
