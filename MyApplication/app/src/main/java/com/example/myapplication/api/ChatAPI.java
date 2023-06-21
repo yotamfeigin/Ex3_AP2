@@ -57,6 +57,7 @@ public class ChatAPI {
                         Chat c = new Chat(chat.getId(), chat.getUser(), chat.getLastMessage());
                         dao.insert(c);
                     }
+                    chats.postValue(dao.getAll());
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();

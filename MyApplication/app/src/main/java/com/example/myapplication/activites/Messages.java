@@ -51,6 +51,7 @@ public class Messages extends AppCompatActivity {
             adapter.setMessages(contactEntities);
         });
 
+
         setUserInfo();
 
     }
@@ -68,9 +69,9 @@ public class Messages extends AppCompatActivity {
     }
 
     private void setUserInfo () {
-        messages = model.getContactMessages().getValue();
         TextView user_name_chat = findViewById(R.id.user_name_chat);
         user_name_chat.setText(otherUser.getDisplayName());
+
 
     }
 }
