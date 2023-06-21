@@ -57,13 +57,13 @@ public class ChatsRepository {
 
     public void add (String name){
         chatApi.add(name);
+
+
     }
 
     public void delete (final Chat chat){
         chatApi.delete(chat);
     }
-
-
 
 
 }

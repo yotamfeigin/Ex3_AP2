@@ -5,7 +5,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.myapplication.entities.User;
-
 @Dao
 public interface UserDao {
 

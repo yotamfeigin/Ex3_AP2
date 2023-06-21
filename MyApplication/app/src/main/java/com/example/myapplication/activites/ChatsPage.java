@@ -55,11 +55,11 @@ public class ChatsPage extends AppCompatActivity {
         setUserInfo();
 
         Button btnAddContact = findViewById(R.id.btnAddChat);
-//        btnAddContact.setOnClickListener( v -> {
-//            Intent i = new Intent(this, AddContact.class);
-//            i.putExtra("userName",userActive);
-//            startActivity(i);
-//        });
+       btnAddContact.setOnClickListener( v -> {
+            Intent i = new Intent(this, AddContact.class);
+            i.putExtra("USER_OBJECT",user);
+            startActivity(i);
+        });
 
 //        Button settings = findViewById(R.id.settings);
 //        settings.setOnClickListener( v -> {

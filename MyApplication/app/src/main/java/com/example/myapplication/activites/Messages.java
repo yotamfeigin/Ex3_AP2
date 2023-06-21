@@ -3,6 +3,7 @@ package com.example.myapplication.activites;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,11 @@ public class Messages extends AppCompatActivity {
             adapter.setMessages(contactEntities);
         });
 
+        ImageButton sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        sendMessageBtn.setOnClickListener(v -> {
+            sendMessage();
+        });
+
 
         setUserInfo();
 
@@ -73,5 +79,11 @@ public class Messages extends AppCompatActivity {
         user_name_chat.setText(otherUser.getDisplayName());
 
 
+    }
+
+    private void sendMessage(){
+        TextView content = findViewById(R.id.editTextChat);
+        model.add(content.getText().toString());
+        content.setText("");
     }
 }

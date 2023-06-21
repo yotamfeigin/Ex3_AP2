@@ -3,6 +3,7 @@ package com.example.myapplication.viewModels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.repository.ChatsRepository;
@@ -25,8 +26,10 @@ public class ChatsViewModel extends ViewModel {
         return chats;
     }
 
+
     public void insert (String name) {
         chatsRepository.add(name);
+
         chats = chatsRepository.getAll();
     }
 

@@ -60,10 +60,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         if(messages != null){
             final Message current = messages.get(position);
             holder.singleMsg.setText(current.getContent());
+
             if(user.getUsername().equals(current.getSender_username())) {
                 // Set the gradient drawable as the background
                 holder.linearLayout.setBackgroundResource(R.drawable.msg2_background);
                 holder.linearLayout.setGravity(Gravity.END); // Set gravity to end
+
             }
             holder.msgTime.setText(current.getCreated());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
