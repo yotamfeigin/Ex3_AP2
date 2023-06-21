@@ -35,11 +35,13 @@ public class Messages extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_massages);
 
+
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT1");
         otherUser = (User) myIntent.getSerializableExtra("USER_OBJECT2");
         chatId = myIntent.getStringExtra("chatId");
         messages = new ArrayList<>();
+
         recyclerView = findViewById(R.id.lstMsg);
         setAdapter();
 
@@ -50,6 +52,7 @@ public class Messages extends AppCompatActivity {
         });
 
         setUserInfo();
+
     }
 
     private void setAdapter() {
