@@ -9,6 +9,7 @@ import com.example.myapplication.daos.ChatDao;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.objects.ChatRet;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -43,8 +44,6 @@ public class ChatAPI {
     }
 
     public void getChats() {
-
-
         Call<List<ChatRet>> call = api.getChats("Bearer " + user.getToken());
         call.enqueue(new Callback<List<ChatRet>>() {
             @Override
@@ -57,6 +56,8 @@ public class ChatAPI {
                         Chat c = new Chat(chat.getId(), chat.getUser(), chat.getLastMessage());
                         dao.insert(c);
                     }
+                    // Notify observers that the chat list has been updated
+                    chats.setValue(dao.getAll());
                 } else {
                     // Handle error cases for GET request
                     String errorMessage = "Error: " + response.code();
@@ -71,14 +72,14 @@ public class ChatAPI {
             }
         });
     }
-
     public void add(String username) {
-        Call<Void> call = api.newChat(user.getToken(), username);
-        call.enqueue(new Callback<Void>() {
+        JsonObject requestBody = new JsonObject();
+        requestBody.addProperty("username", username);
+
+        Call<Void> call = api.newChat("Bearer "  +user.getToken(), requestBody);        call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                   dao.deleteAll();
                    getChats();
                 } else {
                     // Handle error cases for GET request

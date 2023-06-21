@@ -33,7 +33,7 @@ public interface WebServiceAPI {
     Call<List<ChatRet>> getChats(@Header("Authorization") String token );
 
     @POST("Chats")
-    Call<Void> newChat(@Header("Authorization") String token, @Body() String username);
+    Call<Void> newChat(@Header("Authorization") String token, @Body() JsonObject username);
 
     @DELETE("Chats/{chatId}")
     Call<Void> deleteChat(@Header("Authorization") String token, @Path("chatId") String chatId);

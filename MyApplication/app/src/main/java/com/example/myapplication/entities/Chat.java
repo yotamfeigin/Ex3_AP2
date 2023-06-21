@@ -44,10 +44,17 @@ public class Chat {
         this.username = user.getUsername();
         this.displayName = user.getDisplayName();
         this.profilePic = user.getProfilePic();
-        last_id = lastMessage.getId();
+
+        if (lastMessage == null){
+            last_id = -1;
+            created = null;
+            content = null;
+        }
+        else {
+        last_id =  lastMessage.getId() ;
         created = lastMessage.getCreated();
         content = lastMessage.getContent();
-    }
+    }}
 
     public String getUsername() {
         return username;
