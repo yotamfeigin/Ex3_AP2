@@ -29,7 +29,6 @@ public class AddContact extends AppCompatActivity {
 
             finish();
         });
-
         Button buttonExit = findViewById(R.id.buttonExit);
         buttonExit.setOnClickListener( v -> {
             finish();
