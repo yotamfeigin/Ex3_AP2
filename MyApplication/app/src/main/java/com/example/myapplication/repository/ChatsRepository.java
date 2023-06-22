@@ -46,6 +46,8 @@ public class ChatsRepository {
     }
 
     public MutableLiveData<List<Chat>> getAll(){
+        chatsListData.postValue(chatDao.getAll());
+
         return chatsListData;
     }
 
@@ -57,8 +59,6 @@ public class ChatsRepository {
 
     public void add (String name){
         chatApi.add(name);
-
-
     }
 
     public void delete (final Chat chat){

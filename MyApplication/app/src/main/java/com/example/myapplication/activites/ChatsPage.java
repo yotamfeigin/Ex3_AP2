@@ -1,6 +1,7 @@
 package com.example.myapplication.activites;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatsPage extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1; // Choose any unique value as the request code
 
     private ChatsViewModel model;
     private List<Chat> chats;
@@ -34,11 +36,13 @@ public class ChatsPage extends AppCompatActivity {
     private User user;
     private ChatsAdapter.RecycleViewClickListener listener;
     private Intent myIntent;
+    private Bundle savedInstanceState;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_chats_page);
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT");
@@ -58,7 +62,7 @@ public class ChatsPage extends AppCompatActivity {
        btnAddContact.setOnClickListener( v -> {
             Intent i = new Intent(this, AddContact.class);
             i.putExtra("USER_OBJECT",user);
-            startActivity(i);
+           startActivityForResult(i, REQUEST_CODE);
         });
 
 //        Button settings = findViewById(R.id.settings);
@@ -69,6 +73,7 @@ public class ChatsPage extends AppCompatActivity {
 //        });
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -76,6 +81,25 @@ public class ChatsPage extends AppCompatActivity {
         chats.addAll(model.getChats().getValue());
         adapter.notifyDataSetChanged();
     }
+
+    protected void onPause() {
+        super.onPause();
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                String value = data.getStringExtra("username"); // Retrieve the data using the key
+                if(value != null) {
+                    model.insert(value);
+                }
+            }
+        }
+    }
+
 
     private void setAdapter() {
         if (recyclerView != null) {

@@ -50,6 +50,7 @@ public class Messages extends AppCompatActivity {
         model.getContactMessages().observe(this, contactEntities -> {
             messages = contactEntities;
             adapter.setMessages(contactEntities);
+            recyclerView.scrollToPosition(messages.size() - 1);
         });
 
         ImageButton sendMessageBtn = findViewById(R.id.sendMessageBtn);

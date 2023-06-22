@@ -3,11 +3,10 @@ package com.example.myapplication;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.CursorWindow;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -16,7 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.FirebaseApp;
+
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -51,6 +53,16 @@ public class MainActivity extends AppCompatActivity {
                 goToRegisterPage();
             }
         });
+        FirebaseApp.initializeApp(this);
+
+        try{
+            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+            field.setAccessible(true);
+            field.set(null, 100*1024*1024);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void startAsyncTask(View v) {

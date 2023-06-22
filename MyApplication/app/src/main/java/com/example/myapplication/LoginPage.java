@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import static android.os.SystemClock.sleep;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +14,6 @@ import com.example.myapplication.api.LoginAPI;
 import com.example.myapplication.callback.LoginCallback;
 import com.example.myapplication.databinding.ActivityLoginPageBinding;
 import com.example.myapplication.entities.User;
-
 public class LoginPage extends AppCompatActivity {
     private ActivityLoginPageBinding binding;
     private EditText etUsername, etPassword;
@@ -50,12 +47,12 @@ public class LoginPage extends AppCompatActivity {
                     public void onLoginSuccess(User user) {
                         // User has been updated after the login
                         Log.d("User", user.getUsername());
-                        sleep(2000);
                         Log.d("User", user.getUsername());
                         Intent intent = new Intent(LoginPage.this, ChatsPage.class);
                         User test = new User("tal1", "logo.jpg", "Tal");
                         intent.putExtra("USER_OBJECT", user);
                         Log.d("User", user.getUsername());
+
                         startActivity(intent);
                     }
 
