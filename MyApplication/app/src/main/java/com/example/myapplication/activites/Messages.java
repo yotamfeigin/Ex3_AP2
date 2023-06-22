@@ -1,5 +1,6 @@
 package com.example.myapplication.activites;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,5 +89,12 @@ public class Messages extends AppCompatActivity {
         content.setText("");
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("back", "back"); // Put your data using appropriate key-value pairs
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
 }

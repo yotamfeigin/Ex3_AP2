@@ -75,8 +75,8 @@ public class ChatsPage extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         chats.clear();
         chats.addAll(model.getChats().getValue());
         adapter.notifyDataSetChanged();
@@ -99,8 +99,9 @@ public class ChatsPage extends AppCompatActivity {
                 }
             }
         }
-        if(requestCode == 2 && resultCode == Activity.RESULT_OK) {
-
+        if(requestCode == 2) {
+            model.getChats();
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -127,7 +128,6 @@ public class ChatsPage extends AppCompatActivity {
             i.putExtra("USER_OBJECT2", contact.getUser());
             i.putExtra("chatId", contact.getId());
             startActivityForResult(i, 2);
-            startActivity(i);
 
         };
     }
