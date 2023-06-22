@@ -87,4 +87,6 @@ public class Messages extends AppCompatActivity {
         model.add(content.getText().toString());
         content.setText("");
     }
+
+
 }

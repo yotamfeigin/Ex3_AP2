@@ -75,8 +75,8 @@ public class ChatsPage extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         chats.clear();
         chats.addAll(model.getChats().getValue());
         adapter.notifyDataSetChanged();
@@ -93,10 +93,14 @@ public class ChatsPage extends AppCompatActivity {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 String value = data.getStringExtra("username"); // Retrieve the data using the key
+                Log.d("CONTACT", value);
                 if(value != null) {
                     model.insert(value);
                 }
             }
+        }
+        if(requestCode == 2 && resultCode == Activity.RESULT_OK) {
+
         }
     }
 
@@ -122,6 +126,7 @@ public class ChatsPage extends AppCompatActivity {
             i.putExtra("USER_OBJECT1", user);
             i.putExtra("USER_OBJECT2", contact.getUser());
             i.putExtra("chatId", contact.getId());
+            startActivityForResult(i, 2);
             startActivity(i);
 
         };
