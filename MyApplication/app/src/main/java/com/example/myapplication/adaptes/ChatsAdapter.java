@@ -1,6 +1,9 @@
 package com.example.myapplication.adaptes;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,16 +71,30 @@ public class ChatsViewHolder extends RecyclerView.ViewHolder {
         String name = chats.get(position).getUser().getDisplayName();
         String message = chats.get(position).getLastMessage().getContent();
         String messageTime = chats.get(position).getLastMessage().getCreated();
-        if (messageTime != null){
+
+        if (messageTime != null) {
             messageTime = messageTime.substring(11, 16);
         }
+
         holder.name.setText(name);
         holder.message.setText(message);
         holder.messageTime.setText(messageTime);
 
+        // Set profile picture
+        String profilePic = chats.get(position).getUser().getProfilePic();
+        if (profilePic != null) {
+            // Set the image using the base64 string
+            byte[] decodedString = Base64.decode(profilePic, Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.profilePic.setImageBitmap(decodedBitmap);
+        } else {
+            // Set default profile picture
+            holder.profilePic.setImageResource(R.drawable.logo);
+        }
 
         holder.bind(chats.get(position), listener);
     }
+
 
     @Override
     public int getItemCount() {

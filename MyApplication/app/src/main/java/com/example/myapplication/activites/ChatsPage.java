@@ -59,18 +59,20 @@ public class ChatsPage extends AppCompatActivity {
         setUserInfo();
 
         Button btnAddContact = findViewById(R.id.btnAddChat);
-       btnAddContact.setOnClickListener( v -> {
+        btnAddContact.setOnClickListener( v -> {
             Intent i = new Intent(this, AddContact.class);
             i.putExtra("USER_OBJECT",user);
-           startActivityForResult(i, REQUEST_CODE);
+            startActivityForResult(i, REQUEST_CODE);
         });
 
-//        Button settings = findViewById(R.id.settings);
-//        settings.setOnClickListener( v -> {
-//            Intent i = new Intent(this, Settings.class);
-//            i.putExtra("userName",userActive);
-//            startActivity(i);
-//        });
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setText("Logout");
+        btnLogout.setOnClickListener(v -> {
+            // Handle logout functionality here
+            // For example, navigate back to the main activity
+
+            finish(); // Close the current activity
+        });
     }
 
 
@@ -139,8 +141,12 @@ public class ChatsPage extends AppCompatActivity {
         tvMyName.setText(user.getDisplayName());
         // Set the image from Base64 string
         String base64Image =user.getProfilePic();
-        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-        Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        ivMyPic.setImageBitmap(decodedBitmap);
+        if (base64Image != null) {
+            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivMyPic.setImageBitmap(decodedBitmap);
+        } else {
+            ivMyPic.setImageResource(R.drawable.logo);
+        }
     }
 }
