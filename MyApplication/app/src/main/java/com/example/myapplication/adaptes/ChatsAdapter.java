@@ -68,6 +68,9 @@ public class ChatsViewHolder extends RecyclerView.ViewHolder {
         String name = chats.get(position).getUser().getDisplayName();
         String message = chats.get(position).getLastMessage().getContent();
         String messageTime = chats.get(position).getLastMessage().getCreated();
+        if (messageTime != null){
+            messageTime = messageTime.substring(11, 16);
+        }
         holder.name.setText(name);
         holder.message.setText(message);
         holder.messageTime.setText(messageTime);
