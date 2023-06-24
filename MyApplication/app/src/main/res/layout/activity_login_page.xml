@@ -31,26 +31,31 @@
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#e0cffc"
+            android:background="@drawable/edit_text_background"
             android:hint="Username"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#e0cffc"
+            android:background="@drawable/edit_text_background"
             android:hint="Password"
             android:inputType="textPassword"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="32dp" />
 
         <TextView
