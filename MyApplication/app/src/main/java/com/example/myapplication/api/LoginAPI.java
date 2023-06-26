@@ -26,10 +26,12 @@ public class LoginAPI {
     private String username;
     private String password;
     private UserDB userDB;
+    private String fireBaseToken;
 
-    public LoginAPI(String username, String password) {
+    public LoginAPI(String username, String password, String fireBaseToken) {
         this.username = username;
         this.password = password;
+        this.fireBaseToken = fireBaseToken;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
@@ -43,7 +45,7 @@ public class LoginAPI {
 
     public void postLogin(User user, LoginCallback callback) {
         try {
-            Call<JsonObject> call = webServiceAPI.postLogin(username, password);
+            Call<JsonObject> call = webServiceAPI.postLogin(username, password, fireBaseToken);
             String url = call.request().url().toString(); // Get the URL from the request
             Log.d("LoginAPI", "Request URL: " + url);
 

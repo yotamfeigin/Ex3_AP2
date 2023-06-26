@@ -59,6 +59,7 @@ public class MessagesRepository {
     }
 
     public MutableLiveData<List<Message>> getContactMessages(){
+        api.get();
         messageListData.postValue(dao.get(chat.getId()));
         return messageListData;
     }

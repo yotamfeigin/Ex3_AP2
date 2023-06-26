@@ -95,3 +95,20 @@ exports.deleteChat = async (id,currentUser) => {
     throw error;
   }
 };
+
+exports.getChatUser = async (id, username) => {
+  try {
+    
+    const chatUsers = await ChatUser.find({ chatId:id });
+      for(const chatUser of chatUsers) {
+        if(chatUser.username!=username){
+          return chatUser.username;
+        }
+      }
+        return null;
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}

@@ -2,7 +2,10 @@ package com.example.myapplication.activites;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,8 @@ public class ChatsPage extends AppCompatActivity {
     private ChatsAdapter.RecycleViewClickListener listener;
     private Intent myIntent;
     private Bundle savedInstanceState;
+    private BroadcastReceiver receiver;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -73,6 +79,19 @@ public class ChatsPage extends AppCompatActivity {
 
             finish(); // Close the current activity
         });
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                chats.clear();
+                chats.addAll(model.getChats().getValue());
+                adapter.notifyDataSetChanged();
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("1001"));
+
+
+
     }
 
 

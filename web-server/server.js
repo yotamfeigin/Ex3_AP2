@@ -12,6 +12,7 @@ const http = require('http')
 const socketio = require('socket.io')
 const server = http.createServer(app)
 const io = new socketio.Server(server, { cors: { origin: '*' } })
+const admin = require('./Tokens/tokenAdmin.js')
 
 io.on('connection', socket => {
 
@@ -52,6 +53,10 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 app.use('/api', userRoutes)
 app.use('/api', chatRoutes)
 app.use('/api', messageRoutes)
+
+
+
+
 // Start the server
 const PORT = process.env.port
 server.listen(PORT, () => {

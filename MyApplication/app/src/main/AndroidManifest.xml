@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".api.MyApplication"
@@ -17,8 +21,14 @@
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name="com.example.myapplication.activites.AddContact" />
+        <receiver android:name=".firebase.NewMessageBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.myapplication.NEW_MESSAGE_ACTION" />
+            </intent-filter>
+        </receiver>
 
+        <activity android:name=".activites.AddContact" />
         <activity
             android:name=".activites.Messages"
             android:exported="false" />
@@ -40,8 +50,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
-            android:name=".firebase.MyFirebaseMessagingService"
+            android:name=".firebase.FireBaseSer"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

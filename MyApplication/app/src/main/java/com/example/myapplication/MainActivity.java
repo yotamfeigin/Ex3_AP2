@@ -2,9 +2,13 @@ package com.example.myapplication;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.FirebaseApp;
 
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         ExampleAsyncTask task = new ExampleAsyncTask(this);
         task.execute(100);
         Button login = findViewById(R.id.login_button);
-        login.setOnClickListener(new View.OnClickListener(){
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToLoginPage();
@@ -47,18 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
         Button register = findViewById(R.id.register_button);
 
-        register.setOnClickListener( new View.OnClickListener() {
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToRegisterPage();
             }
         });
         FirebaseApp.initializeApp(this);
+        requestNotificationPermission();
 
-        try{
+
+        try {
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
             field.setAccessible(true);
-            field.set(null, 100*1024*1024);
+            field.set(null, 100 * 1024 * 1024);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +88,46 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, RegisterPage.class);
         startActivity(intent);
     }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel with a unique ID and name
+            String channelId = "channel_id";
+            CharSequence channelName = "Channel Name";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            // Create the notification channel object
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+            // Get the notification manager and create the channel
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void requestNotificationPermission() {
+        // Check if notification permission is granted
+        if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            // Notifications are already enabled
+            return;
+        }
+
+        // Create a notification to trigger the permission request
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setContentTitle("Permission Request")
+                .setContentText("Please grant permission to receive notifications")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Show the notification to trigger the permission request
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+
+            return;
+        }
+        notificationManager.notify(0, builder.build());
+    }
+
 
     private static class ExampleAsyncTask extends AsyncTask<Integer, Integer, String> {
         private WeakReference<MainActivity> activityWeakReference;

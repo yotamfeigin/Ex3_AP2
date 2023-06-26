@@ -22,7 +22,7 @@ public interface WebServiceAPI {
     // Users
     @FormUrlEncoded
     @POST("Tokens/")
-    Call<JsonObject> postLogin(@Field("username") String username, @Field("password") String password);
+    Call<JsonObject> postLogin(@Field("username") String username, @Field("password") String password, @Field("fireBaseToken") String fireBaseToken);
 
     @GET("Users/{username}")
     Call<User> getUser(@Path("username") String username, @Header("Authorization") String token );
