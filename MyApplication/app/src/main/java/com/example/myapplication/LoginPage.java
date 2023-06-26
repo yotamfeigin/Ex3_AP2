@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +14,6 @@ import com.example.myapplication.api.LoginAPI;
 import com.example.myapplication.callback.LoginCallback;
 import com.example.myapplication.databinding.ActivityLoginPageBinding;
 import com.example.myapplication.entities.User;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginPage extends AppCompatActivity {
     private ActivityLoginPageBinding binding;
@@ -38,16 +36,8 @@ public class LoginPage extends AppCompatActivity {
         user = new User(etUsername.getText().toString(),null
                 , null);
         Button btnLogin = binding.btnLogin;
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String token = task.getResult();
-                        Log.d("FCM Token", "Token: " + token);
-                        fireBaseToken = token;
-                    } else {
-                        Log.d("FCM Token", "Failed to retrieve token");
-                    }
-                });
+        fireBaseToken = getIntent().getStringExtra("firebaseToken");
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

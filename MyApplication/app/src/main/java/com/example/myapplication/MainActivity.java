@@ -4,12 +4,15 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,7 +25,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.myapplication.activites.ChatsPage;
+import com.example.myapplication.api.LoginAPI;
+import com.example.myapplication.callback.LoginCallback;
+import com.example.myapplication.entities.User;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -31,19 +39,21 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView logoImageView;
     private RelativeLayout logoContainer;
+    private String fireBaseToken;
+
+    private User user;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        user = new User("","","");
         progressBar = findViewById(R.id.progress_bar);
         logoImageView = findViewById(R.id.logo);
         logoContainer = findViewById(R.id.logo_container);
 
-        ExampleAsyncTask task = new ExampleAsyncTask(this);
-        task.execute(100);
         Button login = findViewById(R.id.login_button);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +73,39 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         requestNotificationPermission();
 
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult();
+                        Log.d("FCM Token", "Token: " + token);
+                        fireBaseToken = token;
+                        String savedUsername = sharedPreferences.getString("username", "");
+                        String savedPassword = sharedPreferences.getString("password", "");
+                        if(login == null) {
+                            return;
+                        }
+                        LoginAPI loginApi = new LoginAPI(savedUsername, savedPassword, fireBaseToken);
+
+                        loginApi.postLogin(user, new LoginCallback() {
+                            @Override
+                            public void onLoginSuccess(User user) {
+                                // User has been updated after the login
+                                Intent intent = new Intent(MainActivity.this, ChatsPage.class);
+                                intent.putExtra("USER_OBJECT", user);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onLoginFailure(Throwable throwable) {
+                                // Handle login failure
+                                throwable.printStackTrace();
+                            }
+                        });
+                    } else {
+                        Log.d("FCM Token", "Failed to retrieve token");
+                    }
+                });
+
 
         try {
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
@@ -81,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToLoginPage() {
         Intent intent = new Intent(MainActivity.this, LoginPage.class);
+        intent.putExtra("firebaseToken", fireBaseToken);
         startActivity(intent);
     }
 

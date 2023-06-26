@@ -1,5 +1,7 @@
 package com.example.myapplication.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -20,8 +22,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginAPI {
+
+    private Context context;
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
+
+    private SharedPreferences.Editor editor;
 
     private String username;
     private String password;
@@ -32,6 +38,7 @@ public class LoginAPI {
         this.username = username;
         this.password = password;
         this.fireBaseToken = fireBaseToken;
+        this.context = MyApplication.context;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
@@ -41,6 +48,8 @@ public class LoginAPI {
         userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public void postLogin(User user, LoginCallback callback) {
@@ -62,8 +71,10 @@ public class LoginAPI {
                         Log.d("token", token);
                         user.setToken(token);
                         getUser(user, token, callback);
-                        // Handle the JSON object response
-                        // ...
+                        editor.putString("username", username);
+                        editor.putString("password", password);
+                        editor.apply();
+
 
                     } else {
                         callback.onLoginFailure(new Throwable("Login failed"));
@@ -95,7 +106,6 @@ public class LoginAPI {
                     user.setProfilePic(userResponse.getProfilePic());
                     // Save the user to Room
                     Executors.newSingleThreadExecutor().execute(() -> {
-                        userDB.UserDao().insert(user);
                         callback.onLoginSuccess(user); // Invoke the callback method
                     });
 
