@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ public class ChatsPage extends AppCompatActivity {
     private Bundle savedInstanceState;
     private BroadcastReceiver receiver;
 
+    private SharedPreferences.Editor editor;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,6 +53,9 @@ public class ChatsPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_chats_page);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT");
         chats = new ArrayList<>();
@@ -76,6 +82,10 @@ public class ChatsPage extends AppCompatActivity {
         btnLogout.setOnClickListener(v -> {
             // Handle logout functionality here
             // For example, navigate back to the main activity
+
+            editor.remove("username");
+            editor.remove("password");
+            editor.apply();
 
             finish(); // Close the current activity
         });

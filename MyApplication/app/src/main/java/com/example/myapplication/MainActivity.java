@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         String token = task.getResult();
                         Log.d("FCM Token", "Token: " + token);
                         fireBaseToken = token;
-                        String savedUsername = sharedPreferences.getString("username", "");
-                        String savedPassword = sharedPreferences.getString("password", "");
+                        String savedUsername = sharedPreferences.getString("username", null);
+                        String savedPassword = sharedPreferences.getString("password", null);
                         if(login == null) {
                             return;
                         }
