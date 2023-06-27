@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adaptes.ChatsAdapter;
+import com.example.myapplication.api.FireBaseAPI;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.viewModels.ChatsViewModel;
@@ -86,6 +87,8 @@ public class ChatsPage extends AppCompatActivity {
             editor.remove("username");
             editor.remove("password");
             editor.apply();
+            FireBaseAPI fireBaseAPI = new FireBaseAPI(user);
+            fireBaseAPI.delete();
 
             finish(); // Close the current activity
         });

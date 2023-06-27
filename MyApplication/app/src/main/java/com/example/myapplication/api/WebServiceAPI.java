@@ -46,5 +46,7 @@ public interface WebServiceAPI {
     @POST("Chats/{chatId}/Messages")
     Call<Void> sendMessage(@Body JsonObject body, @Path("chatId") String chatId, @Header("Authorization") String token);
 
+    @DELETE("Tokens/{username}")
+    Call<Void> deleteFireBase(@Path("username") String username, @Header("Authorization") String token);
 }
 
