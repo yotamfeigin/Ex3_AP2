@@ -19,20 +19,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Logout" />
+            android:text="Logout"
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="16dp" />
 
         <Button
             android:id="@+id/btnAddChat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add Contact" />
+            android:text="Add Contact"
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="16dp" />
 
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/myProfile"
-        android:background="#886E6E"
+        android:background="#c29ffa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
