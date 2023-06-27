@@ -1,5 +1,6 @@
 package com.example.myapplication.activites;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class Messages extends AppCompatActivity {
         model.getContactMessages().observe(this, contactEntities -> {
             messages = contactEntities;
             adapter.setMessages(contactEntities);
+            recyclerView.scrollToPosition(messages.size() - 1);
         });
 
         ImageButton sendMessageBtn = findViewById(R.id.sendMessageBtn);
@@ -85,5 +87,14 @@ public class Messages extends AppCompatActivity {
         TextView content = findViewById(R.id.editTextChat);
         model.add(content.getText().toString());
         content.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("back", "back"); // Put your data using appropriate key-value pairs
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

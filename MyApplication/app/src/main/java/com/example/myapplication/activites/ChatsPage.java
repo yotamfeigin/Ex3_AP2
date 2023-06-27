@@ -1,6 +1,7 @@
 package com.example.myapplication.activites;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatsPage extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1; // Choose any unique value as the request code
 
     private ChatsViewModel model;
     private List<Chat> chats;
@@ -34,11 +36,13 @@ public class ChatsPage extends AppCompatActivity {
     private User user;
     private ChatsAdapter.RecycleViewClickListener listener;
     private Intent myIntent;
+    private Bundle savedInstanceState;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_chats_page);
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT");
@@ -55,19 +59,22 @@ public class ChatsPage extends AppCompatActivity {
         setUserInfo();
 
         Button btnAddContact = findViewById(R.id.btnAddChat);
-       btnAddContact.setOnClickListener( v -> {
+        btnAddContact.setOnClickListener( v -> {
             Intent i = new Intent(this, AddContact.class);
             i.putExtra("USER_OBJECT",user);
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE);
         });
 
-//        Button settings = findViewById(R.id.settings);
-//        settings.setOnClickListener( v -> {
-//            Intent i = new Intent(this, Settings.class);
-//            i.putExtra("userName",userActive);
-//            startActivity(i);
-//        });
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setText("Logout");
+        btnLogout.setOnClickListener(v -> {
+            // Handle logout functionality here
+            // For example, navigate back to the main activity
+
+            finish(); // Close the current activity
+        });
     }
+
 
     @Override
     protected void onResume() {
@@ -76,6 +83,30 @@ public class ChatsPage extends AppCompatActivity {
         chats.addAll(model.getChats().getValue());
         adapter.notifyDataSetChanged();
     }
+
+    protected void onPause() {
+        super.onPause();
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                String value = data.getStringExtra("username"); // Retrieve the data using the key
+                Log.d("CONTACT", value);
+                if(value != null) {
+                    model.insert(value);
+                }
+            }
+        }
+        if(requestCode == 2) {
+            model.getChats();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 
     private void setAdapter() {
         if (recyclerView != null) {
@@ -98,7 +129,7 @@ public class ChatsPage extends AppCompatActivity {
             i.putExtra("USER_OBJECT1", user);
             i.putExtra("USER_OBJECT2", contact.getUser());
             i.putExtra("chatId", contact.getId());
-            startActivity(i);
+            startActivityForResult(i, 2);
 
         };
     }
@@ -110,8 +141,12 @@ public class ChatsPage extends AppCompatActivity {
         tvMyName.setText(user.getDisplayName());
         // Set the image from Base64 string
         String base64Image =user.getProfilePic();
-        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-        Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        ivMyPic.setImageBitmap(decodedBitmap);
+        if (base64Image != null) {
+            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivMyPic.setImageBitmap(decodedBitmap);
+        } else {
+            ivMyPic.setImageResource(R.drawable.logo);
+        }
     }
 }

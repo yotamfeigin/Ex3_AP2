@@ -77,6 +77,7 @@ public class Chat {
     }
 
     public void setProfilePic(String profilePic) {
+
         this.profilePic = profilePic;
     }
 

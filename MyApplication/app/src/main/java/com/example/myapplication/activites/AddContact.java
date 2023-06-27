@@ -1,8 +1,10 @@
 package com.example.myapplication.activites;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,14 +26,22 @@ public class AddContact extends AppCompatActivity {
         chatsViewModel = new ChatsViewModel(currentUser);
         Button buttonAddContact = findViewById(R.id.buttonAddContact);
         buttonAddContact.setOnClickListener( v -> {
-            TextView userName = findViewById(R.id.addContact_userName);
-            chatsViewModel.insert(userName.getText().toString());
-
+            EditText userName = findViewById(R.id.addContact_userName);
+            Intent intent = new Intent();
+            intent.putExtra("username", userName.getText().toString()); // Put your data using appropriate key-value pairs
+            setResult(Activity.RESULT_OK, intent);
             finish();
         });
         Button buttonExit = findViewById(R.id.buttonExit);
         buttonExit.setOnClickListener( v -> {
             finish();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TextView userName = findViewById(R.id.addContact_userName);
+        userName.setText("");
     }
 }

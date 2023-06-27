@@ -2,8 +2,6 @@ package com.example.myapplication.adaptes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.User;
-import com.example.namespace.R;
 
 import java.util.List;
 
@@ -32,6 +29,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         public MessageViewHolder(View itemView) {
             super(itemView);
             singleMsg = itemView.findViewById(R.id.singleMsg);
+
             msgTime = itemView.findViewById(R.id.msgTime);
             linearLayout = itemView.findViewById(R.id.allMsg);
         }
@@ -64,10 +62,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             if(user.getUsername().equals(current.getSender_username())) {
                 // Set the gradient drawable as the background
                 holder.linearLayout.setBackgroundResource(R.drawable.msg2_background);
-                holder.linearLayout.setGravity(Gravity.END); // Set gravity to end
+                holder.linearLayout.setGravity(Gravity.END);
 
             }
-            holder.msgTime.setText(current.getCreated());
+            holder.msgTime.setText(current.getCreated().substring(11,16));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.weight = 1.0f;
                 params.gravity = Gravity.START;

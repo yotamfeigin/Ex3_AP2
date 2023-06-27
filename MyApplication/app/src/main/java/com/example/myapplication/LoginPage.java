@@ -1,13 +1,11 @@
 package com.example.myapplication;
 
-import static android.os.SystemClock.sleep;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,10 +18,9 @@ import com.example.myapplication.entities.User;
 public class LoginPage extends AppCompatActivity {
     private ActivityLoginPageBinding binding;
     private EditText etUsername, etPassword;
-    private String Username, Password;
+    private String username, password;
 
     private User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,21 +38,16 @@ public class LoginPage extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Username = etUsername.getText().toString();
-                Password = etPassword.getText().toString();
+                username = etUsername.getText().toString();
+                password = etPassword.getText().toString();
 
-                LoginAPI loginApi = new LoginAPI(Username,Password);
+                LoginAPI loginApi = new LoginAPI(username, password);
                 loginApi.postLogin(user, new LoginCallback() {
                     @Override
                     public void onLoginSuccess(User user) {
                         // User has been updated after the login
-                        Log.d("User", user.getUsername());
-                        sleep(2000);
-                        Log.d("User", user.getUsername());
                         Intent intent = new Intent(LoginPage.this, ChatsPage.class);
-                        User test = new User("tal1", "logo.jpg", "Tal");
                         intent.putExtra("USER_OBJECT", user);
-                        Log.d("User", user.getUsername());
                         startActivity(intent);
                     }
 
@@ -65,8 +57,23 @@ public class LoginPage extends AppCompatActivity {
                         throwable.printStackTrace();
                     }
                 });
-
             }
         });
+
+        TextView tvRegister = binding.tvRegister;
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginPage.this, RegisterPage.class);
+                startActivity(intent);            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Clear the EditText fields
+        etUsername.setText("");
+        etPassword.setText("");
     }
 }
