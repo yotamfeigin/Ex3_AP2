@@ -1,5 +1,8 @@
 package com.example.myapplication.api;
 
+
+import static com.example.myapplication.api.MyApplication.context;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -40,12 +43,14 @@ public class LoginAPI {
         this.fireBaseToken = fireBaseToken;
         this.context = MyApplication.context;
 
+        SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
+        String BaseUrl = SharedPreferences.getString("BaseUrl","");
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
-        userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
+        userDB = Room.databaseBuilder(context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);

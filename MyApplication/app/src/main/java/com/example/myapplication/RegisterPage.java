@@ -1,38 +1,29 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.myapplication.api.LoginAPI;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.api.RegisterAPI;
 import com.example.myapplication.api.RegsiterServiceAPI;
-import com.example.myapplication.api.WebServiceAPI;
 import com.example.myapplication.databinding.ActivityRegisterPageBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import retrofit2.Retrofit;
-
 public class RegisterPage extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ActivityRegisterPageBinding binding;
     private ImageView myImageView;
-    private Retrofit retrofit;
-    private RegsiterServiceAPI registerServiceAPI;
     private String username, password, displayName, profilePic;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +35,7 @@ public class RegisterPage extends AppCompatActivity {
         Button selectImageButton = binding.selectImageButton;
         Button btnRegister = binding.btnRegister;
         profilePic = convertImageToBase64();
+
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,21 +49,66 @@ public class RegisterPage extends AppCompatActivity {
                 username = binding.etUsername.getText().toString();
                 password = binding.etPassword.getText().toString();
                 displayName = binding.etDisplayName.getText().toString();
+                String passwordValidation = binding.etReEnterPassword.getText().toString();
+
+                boolean hasError = false;
+
+                if (username.isEmpty()) {
+                    setErrorBackground(binding.etUsername);
+                    hasError = true;
+                } else {
+                    clearErrorBackground(binding.etUsername);
+                }
+
+                if (password.isEmpty()) {
+                    setErrorBackground(binding.etPassword);
+                    hasError = true;
+                } else if (password.length() < 8 || !isPasswordValid(password)) {
+                    setErrorBackground(binding.etPassword);
+                    hasError = true;
+                } else {
+                    clearErrorBackground(binding.etPassword);
+                }
+
+                if (!password.equals(passwordValidation)) {
+                    setErrorBackground(binding.etReEnterPassword);
+                    hasError = true;
+                } else {
+                    clearErrorBackground(binding.etReEnterPassword);
+                }
+
+                if (displayName.isEmpty()) {
+                    setErrorBackground(binding.etDisplayName);
+                    hasError = true;
+                } else {
+                    clearErrorBackground(binding.etDisplayName);
+                }
+
+                if (hasError) {
+                    return;
+                }
 
                 RegisterAPI registerAPI = new RegisterAPI(username, password, displayName, profilePic);
                 registerAPI.register();
                 finish();
-
             }
         });
     }
 
+    private void setErrorBackground(View view) {
+        view.setBackgroundResource(R.drawable.edit_text_error_background);
+    }
+
+    private void clearErrorBackground(View view) {
+        view.setBackgroundResource(R.drawable.edit_text_background);
+    }
+
     private void openImagePicker() {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
-        }
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,9 +131,43 @@ public class RegisterPage extends AppCompatActivity {
         }
     }
 
+    private boolean isPasswordValid(String password) {
+        // Check if password is at least 8 characters long
+        if (password.length() < 8) {
+            return false;
+        }
+
+        // Check if password contains at least one uppercase letter
+        boolean hasUpperCase = password.matches(".*[A-Z].*");
+        if (!hasUpperCase) {
+            return false;
+        }
+
+        // Check if password contains at least one lowercase letter
+        boolean hasLowerCase = password.matches(".*[a-z].*");
+        if (!hasLowerCase) {
+            return false;
+        }
+
+        // Check if password contains at least one digit
+        boolean hasDigit = password.matches(".*\\d.*");
+        if (!hasDigit) {
+            return false;
+        }
+
+        // Check if password contains at least one special character
+        boolean hasSpecialCharacter = password.matches(".*[-!@#$%^&*()_+|\\[\\]{};:/<>,.?].*");
+        if (!hasSpecialCharacter) {
+            return false;
+        }
+
+        // If password passes all checks, return true
+        return true;
+    }
+
     private String convertImageToBase64() {
         try {
-            @SuppressLint("ResourceType") InputStream inputStream = getResources().openRawResource(R.drawable.logo);
+            InputStream inputStream = getResources().openRawResource(R.drawable.logo);
             byte[] imageData = getBytesFromInputStream(inputStream);
             return Base64.encodeToString(imageData, Base64.DEFAULT);
         } catch (IOException e) {
@@ -115,4 +186,4 @@ public class RegisterPage extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
-    }
+}

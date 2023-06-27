@@ -7,4 +7,6 @@
     <string name="cancel">cancel</string>
     <string name="UserName">Username</string>
     <string name="add_contact">Add contact</string>
+    <string name="SharedPrefs">SharedPreferencesString</string>
+
 </resources>
