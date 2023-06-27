@@ -19,6 +19,13 @@ public class FireBaseSer extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        if (remoteMessage.getNotification() != null) {
+            // Handle the received notification message
+            String title = remoteMessage.getNotification().getTitle();
+            String body = remoteMessage.getNotification().getBody();
+            // Display the notification to the user
+            NotificationUtils.showNotification(this, title, body);
+        }
         Intent intent = new Intent("1001").putExtra("Messge", "message");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
