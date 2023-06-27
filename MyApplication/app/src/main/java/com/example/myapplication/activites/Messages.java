@@ -1,13 +1,17 @@
 package com.example.myapplication.activites;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +27,7 @@ import java.util.List;
 
 public class Messages extends AppCompatActivity {
 
+    public static final String ACTION_UPDATE_MESSAGES = "com.example.myapplication.ACTION_UPDATE_MESSAGES";
     private MessageViewModel model;
     private List<Message> messages;
     private RecyclerView recyclerView;
@@ -32,6 +37,8 @@ public class Messages extends AppCompatActivity {
     private String chatId;
 
     private Intent myIntent;
+    private BroadcastReceiver receiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,27 @@ public class Messages extends AppCompatActivity {
 
         setUserInfo();
 
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                messages.clear();
+                messages.addAll(model.get().getValue());
+                adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(messages.size() - 1);
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("1001"));
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        messages.clear();
+        messages.addAll(model.get().getValue());
+        adapter.notifyDataSetChanged();
     }
 
     private void setAdapter() {

@@ -2,7 +2,11 @@ package com.example.myapplication.activites;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adaptes.ChatsAdapter;
+import com.example.myapplication.api.FireBaseAPI;
 import com.example.myapplication.entities.Chat;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.viewModels.ChatsViewModel;
@@ -37,6 +43,10 @@ public class ChatsPage extends AppCompatActivity {
     private ChatsAdapter.RecycleViewClickListener listener;
     private Intent myIntent;
     private Bundle savedInstanceState;
+    private BroadcastReceiver receiver;
+
+    private SharedPreferences.Editor editor;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,6 +54,9 @@ public class ChatsPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_chats_page);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         myIntent = getIntent();
         user = (User) myIntent.getSerializableExtra("USER_OBJECT");
         chats = new ArrayList<>();
@@ -71,8 +84,27 @@ public class ChatsPage extends AppCompatActivity {
             // Handle logout functionality here
             // For example, navigate back to the main activity
 
+            editor.remove("username");
+            editor.remove("password");
+            editor.apply();
+            FireBaseAPI fireBaseAPI = new FireBaseAPI(user);
+            fireBaseAPI.delete();
+
             finish(); // Close the current activity
         });
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                chats.clear();
+                chats.addAll(model.getChats().getValue());
+                adapter.notifyDataSetChanged();
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("1001"));
+
+
+
     }
 
 

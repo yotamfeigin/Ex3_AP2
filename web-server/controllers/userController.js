@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const userService = require('../services/userService')
+const tokenService = require('../services/tokenService')
 
 exports.createUser = async (req, res) => {
   try {
@@ -57,13 +58,19 @@ exports.getUser = async (req, res) => {
 exports.authenticateUser = async (req, res) => {
   try {
     console.log(req.body);
-    const { username, password } = req.body
-    console.log(username, password);
+    const { username, password, fireBaseToken } = req.body
+    console.log(username, password, fireBaseToken);
 
     // Find the user in the database
     const user = await userService.getUserByUsername(username)
 
     if (user) {
+      if(fireBaseToken !== undefined){
+        await tokenService.createToken({
+          username,
+          token: fireBaseToken
+        })
+      }
       // Check if the provided password matches the user's password
       if (password === user.password) {
         // Generate a JWT token

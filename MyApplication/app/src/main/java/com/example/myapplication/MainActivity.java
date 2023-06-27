@@ -4,10 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +24,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.example.myapplication.activites.ChatsPage;
+import com.example.myapplication.api.LoginAPI;
+import com.example.myapplication.callback.LoginCallback;
+import com.example.myapplication.entities.User;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -28,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView logoImageView;
     private RelativeLayout logoContainer;
+    private String fireBaseToken;
+    private User user;
     public String BaseUrl;
     private Button loginButton;
     private Button registerButton;
@@ -40,12 +56,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        user = new User("","","");
         BaseUrl = getString(R.string.BaseUrl);
         saveUrl(); // Saving the default Url to SharedPreferences
+
 
         progressBar = findViewById(R.id.progress_bar);
         logoImageView = findViewById(R.id.logo);
         logoContainer = findViewById(R.id.logo_container);
+
+        Button login = findViewById(R.id.login_button);
+        login.setOnClickListener(new View.OnClickListener() {
 
         ExampleAsyncTask task = new ExampleAsyncTask(this);
         task.execute(100);
@@ -59,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerButton = findViewById(R.id.register_button);
 
+        register.setOnClickListener(new View.OnClickListener() {
         registerButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,11 +101,46 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setAlpha(0f);
 
         FirebaseApp.initializeApp(this);
+        requestNotificationPermission();
 
-        try{
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult();
+                        Log.d("FCM Token", "Token: " + token);
+                        fireBaseToken = token;
+                        String savedUsername = sharedPreferences.getString("username", null);
+                        String savedPassword = sharedPreferences.getString("password", null);
+                        if(login == null) {
+                            return;
+                        }
+                        LoginAPI loginApi = new LoginAPI(savedUsername, savedPassword, fireBaseToken);
+
+                        loginApi.postLogin(user, new LoginCallback() {
+                            @Override
+                            public void onLoginSuccess(User user) {
+                                // User has been updated after the login
+                                Intent intent = new Intent(MainActivity.this, ChatsPage.class);
+                                intent.putExtra("USER_OBJECT", user);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onLoginFailure(Throwable throwable) {
+                                // Handle login failure
+                                throwable.printStackTrace();
+                            }
+                        });
+                    } else {
+                        Log.d("FCM Token", "Failed to retrieve token");
+                    }
+                });
+
+
+        try {
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
             field.setAccessible(true);
-            field.set(null, 100*1024*1024);
+            field.set(null, 100 * 1024 * 1024);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void goToLoginPage() {
         Intent intent = new Intent(MainActivity.this, LoginPage.class);
+        intent.putExtra("firebaseToken", fireBaseToken);
         startActivity(intent);
     }
 
@@ -112,6 +171,46 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, RegisterPage.class);
         startActivity(intent);
     }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel with a unique ID and name
+            String channelId = "channel_id";
+            CharSequence channelName = "Channel Name";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            // Create the notification channel object
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+            // Get the notification manager and create the channel
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void requestNotificationPermission() {
+        // Check if notification permission is granted
+        if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            // Notifications are already enabled
+            return;
+        }
+
+        // Create a notification to trigger the permission request
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setContentTitle("Permission Request")
+                .setContentText("Please grant permission to receive notifications")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Show the notification to trigger the permission request
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+
+            return;
+        }
+        notificationManager.notify(0, builder.build());
+    }
+
 
     private static class ExampleAsyncTask extends AsyncTask<Integer, Integer, String> {
         private WeakReference<MainActivity> activityWeakReference;

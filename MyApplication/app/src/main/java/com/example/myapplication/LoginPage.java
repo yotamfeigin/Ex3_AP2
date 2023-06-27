@@ -20,6 +20,8 @@ public class LoginPage extends AppCompatActivity {
     private EditText etUsername, etPassword;
     private String username, password;
 
+    private String fireBaseToken;
+
     private User user;
 
     @Override
@@ -34,6 +36,9 @@ public class LoginPage extends AppCompatActivity {
         user = new User(etUsername.getText().toString(),null
                 , null);
         Button btnLogin = binding.btnLogin;
+        fireBaseToken = getIntent().getStringExtra("firebaseToken");
+
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +46,10 @@ public class LoginPage extends AppCompatActivity {
                 username = etUsername.getText().toString();
                 password = etPassword.getText().toString();
 
-                LoginAPI loginApi = new LoginAPI(username, password);
+
+
+                LoginAPI loginApi = new LoginAPI(username, password, fireBaseToken);
+
                 loginApi.postLogin(user, new LoginCallback() {
                     @Override
                     public void onLoginSuccess(User user) {

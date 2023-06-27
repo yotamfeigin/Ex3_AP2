@@ -29,6 +29,7 @@ public class MessageViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<Message>> get(){
+        messagesRepository.getContactMessages();
         return messages;
     }
 
@@ -46,7 +47,7 @@ public class MessageViewModel extends ViewModel {
     public void reload() {messagesRepository.reload();}
 
     public void getAll(String last){
-        messagesRepository.get();
+        messagesRepository.getContactMessages();
     }
 
 }

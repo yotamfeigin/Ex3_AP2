@@ -1,5 +1,6 @@
 package com.example.myapplication.api;
 
+
 import static com.example.myapplication.api.MyApplication.context;
 
 import android.content.Context;
@@ -24,16 +25,24 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginAPI {
+
+    private Context context;
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
+
+    private SharedPreferences.Editor editor;
 
     private String username;
     private String password;
     private UserDB userDB;
+    private String fireBaseToken;
 
-    public LoginAPI(String username, String password) {
+    public LoginAPI(String username, String password, String fireBaseToken) {
         this.username = username;
         this.password = password;
+        this.fireBaseToken = fireBaseToken;
+        this.context = MyApplication.context;
+
         SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
         String BaseUrl = SharedPreferences.getString("BaseUrl","");
         retrofit = new Retrofit.Builder()
@@ -44,11 +53,13 @@ public class LoginAPI {
         userDB = Room.databaseBuilder(context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public void postLogin(User user, LoginCallback callback) {
         try {
-            Call<JsonObject> call = webServiceAPI.postLogin(username, password);
+            Call<JsonObject> call = webServiceAPI.postLogin(username, password, fireBaseToken);
             String url = call.request().url().toString(); // Get the URL from the request
             Log.d("LoginAPI", "Request URL: " + url);
 
@@ -65,8 +76,10 @@ public class LoginAPI {
                         Log.d("token", token);
                         user.setToken(token);
                         getUser(user, token, callback);
-                        // Handle the JSON object response
-                        // ...
+                        editor.putString("username", username);
+                        editor.putString("password", password);
+                        editor.apply();
+
 
                     } else {
                         callback.onLoginFailure(new Throwable("Login failed"));
@@ -98,7 +111,6 @@ public class LoginAPI {
                     user.setProfilePic(userResponse.getProfilePic());
                     // Save the user to Room
                     Executors.newSingleThreadExecutor().execute(() -> {
-                        userDB.UserDao().insert(user);
                         callback.onLoginSuccess(user); // Invoke the callback method
                     });
 
