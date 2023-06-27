@@ -1,5 +1,9 @@
 package com.example.myapplication.api;
 
+import static com.example.myapplication.api.MyApplication.context;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -30,13 +34,14 @@ public class LoginAPI {
     public LoginAPI(String username, String password) {
         this.username = username;
         this.password = password;
-
+        SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
+        String BaseUrl = SharedPreferences.getString("BaseUrl","");
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
-        userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
+        userDB = Room.databaseBuilder(context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
     }
