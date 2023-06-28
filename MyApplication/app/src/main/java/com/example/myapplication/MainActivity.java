@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private String fireBaseToken;
 
     private User user;
+    private Button settingsButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -68,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToRegisterPage();
+            }
+        });
+
+        settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSettings();
+                Log.d("SETTINGS", "onClick: ");
             }
         });
         FirebaseApp.initializeApp(this);
@@ -130,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToRegisterPage() {
         Intent intent = new Intent(MainActivity.this, RegisterPage.class);
+        startActivity(intent);
+    }
+
+    public void goToSettings() {
+        Intent intent = new Intent(MainActivity.this, Settings.class);
         startActivity(intent);
     }
 

@@ -1,5 +1,7 @@
 package com.example.myapplication.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -38,8 +40,14 @@ public class ChatAPI {
         this.chats = chats;
         this.dao = dao;
         this.user = user;
+
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences(
+                MyApplication.context.getString(R.string.SharedPrefs),
+                Context.MODE_PRIVATE
+        );
+        String baseUrl = sharedPreferences.getString("BaseUrl", MyApplication.context.getString(R.string.BaseUrl));
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(WebServiceAPI.class);

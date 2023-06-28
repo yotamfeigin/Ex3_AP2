@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,20 +34,15 @@ public class LoginPage extends AppCompatActivity {
 
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
-        user = new User(etUsername.getText().toString(),null
-                , null);
+        user = new User(etUsername.getText().toString(), null, null);
         Button btnLogin = binding.btnLogin;
         fireBaseToken = getIntent().getStringExtra("firebaseToken");
-
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 username = etUsername.getText().toString();
                 password = etPassword.getText().toString();
-
-
 
                 LoginAPI loginApi = new LoginAPI(username, password, fireBaseToken);
 
@@ -63,6 +59,7 @@ public class LoginPage extends AppCompatActivity {
                     public void onLoginFailure(Throwable throwable) {
                         // Handle login failure
                         throwable.printStackTrace();
+                        Toast.makeText(LoginPage.this, "Login failed", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -73,7 +70,8 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginPage.this, RegisterPage.class);
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
     }
 

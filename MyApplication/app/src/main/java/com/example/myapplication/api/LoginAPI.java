@@ -40,16 +40,21 @@ public class LoginAPI {
         this.fireBaseToken = fireBaseToken;
         this.context = MyApplication.context;
 
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences(
+                MyApplication.context.getString(R.string.SharedPrefs),
+                Context.MODE_PRIVATE
+        );
+        String baseUrl = sharedPreferences.getString("BaseUrl", MyApplication.context.getString(R.string.BaseUrl));
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
         userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        SharedPreferences loginPref = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = loginPref.edit();
     }
 
     public void postLogin(User user, LoginCallback callback) {

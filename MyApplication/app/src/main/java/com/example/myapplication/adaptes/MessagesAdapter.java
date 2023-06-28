@@ -64,7 +64,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 holder.linearLayout.setGravity(Gravity.END);
 
             }
-            holder.msgTime.setText(current.getCreated());
+            holder.msgTime.setText(current.getCreated().substring(11,16));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.weight = 1.0f;
                 params.gravity = Gravity.START;

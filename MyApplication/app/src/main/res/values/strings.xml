@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="BaseUrl">http://10.100.102.138:5000/api/</string>
+    <string name="BaseUrl">http://10.0.2.2:5000/api/</string>
     <string name="enter_your_message">write massage</string>
     <string name="send">send</string>
     <string name="add">add</string>
     <string name="cancel">cancel</string>
     <string name="UserName">Username</string>
     <string name="add_contact">Add contact</string>
+    <string name="SharedPrefs">SharedPreferencesString</string>
 </resources>
