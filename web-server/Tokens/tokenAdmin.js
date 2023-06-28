@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const serviceAccount = require('../firebaseConfig.json');
 
 // Initialize the SDK with service account credentials
 const serviceAccount = {
