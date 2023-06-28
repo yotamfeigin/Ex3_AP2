@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         logoContainer = findViewById(R.id.logo_container);
 
         Button login = findViewById(R.id.login_button);
-        login.setOnClickListener(new View.OnClickListener() {
+
 
         ExampleAsyncTask task = new ExampleAsyncTask(this);
         task.execute(100);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerButton = findViewById(R.id.register_button);
 
-        register.setOnClickListener(new View.OnClickListener() {
+
         registerButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
         requestNotificationPermission();
 
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String token = task.getResult();
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        String token = task1.getResult();
                         Log.d("FCM Token", "Token: " + token);
                         fireBaseToken = token;
                         String savedUsername = sharedPreferences.getString("username", null);
