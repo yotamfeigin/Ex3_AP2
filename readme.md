@@ -50,7 +50,7 @@ Start the server:
             In the Firebase project settings, go to the "Cloud Messaging" tab.
             Copy the "Server Key" value.
             Configure the server:
-        In the web-server directory, open the firebaseConfig.js file.
+        In the web-server directory, open the firebaseConfig.json file.
         Replace the placeholder value with your Firebase project's server key.
         Save the file.
 
