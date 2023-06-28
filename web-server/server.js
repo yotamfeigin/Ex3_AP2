@@ -14,6 +14,8 @@ const server = http.createServer(app)
 const io = new socketio.Server(server, { cors: { origin: '*' } })
 const admin = require('./Tokens/tokenAdmin.js')
 
+
+
 io.on('connection', socket => {
 
   socket.on('newMessage', (chatId) => {
@@ -53,6 +55,10 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 app.use('/api', userRoutes)
 app.use('/api', chatRoutes)
 app.use('/api', messageRoutes)
+
+exports.refreshReact = async (chatId) => {
+  io.emit('newMessage', chatId)
+}
 
 
 

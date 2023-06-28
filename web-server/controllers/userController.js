@@ -88,3 +88,33 @@ exports.authenticateUser = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' })
   }
 }
+
+exports.logoutUser = async (req, res) => {
+  try {
+    const { username } = req.params
+    const token = req.headers.authorization.split(' ')[1] // Extract the token from the "Authorization" header
+    const parsedToken = JSON.parse(token) // Parse the token string as JSON
+    const tokenValue = parsedToken.token // Access the value of the "token" key
+
+    const user = await userService.getUserByUsername(username)
+
+    if (user) {
+      // Verify the token
+      jwt.verify(tokenValue, 'your-secret-key', (err, decoded) => {
+        if (err) {
+          // Token is invalid or expired
+          res.status(401).json({ error: 'Invalid token' })
+        } else {
+          // Token is valid
+          tokenService.deleteToken(username)
+            res.status(200).send('User logged out successfully')
+        }
+      })
+    } else {
+      res.status(404).json({ error: 'User not found' })
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' })
+    console.log(error);
+  }
+}

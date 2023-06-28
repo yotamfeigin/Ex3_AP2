@@ -21,7 +21,12 @@
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <receiver android:name=".firebase.NewMessageBroadcastReceiver"
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+
+        <receiver
+            android:name=".firebase.NewMessageBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.myapplication.NEW_MESSAGE_ACTION" />
@@ -34,9 +39,6 @@
             android:exported="false" />
         <activity
             android:name=".activites.ChatsPage"
-            android:exported="false" />
-        <activity
-            android:name=".Settings"
             android:exported="false" />
         <activity
             android:name=".RegisterPage"

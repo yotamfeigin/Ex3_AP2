@@ -8,10 +8,11 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.api.MyApplication;
+
 public class Settings extends AppCompatActivity {
 
-    private static final String SHARED_PREFS_KEY = "SHARED PREFS";
-    private static final String BASE_URL_KEY = "BaseUrl";
+
 
     private EditText etServerUrl;
     private SharedPreferences sharedPreferences;
@@ -22,7 +23,7 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         etServerUrl = findViewById(R.id.etServerUrl);
-        sharedPreferences = getSharedPreferences(String.valueOf(R.string.SharedPrefs), MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MyApplication.context.getString(R.string.SharedPrefs), MODE_PRIVATE);
 
         String baseUrl = getBaseUrl();
         etServerUrl.setText(baseUrl);
@@ -42,12 +43,12 @@ public class Settings extends AppCompatActivity {
 
     private void saveBaseUrl(String baseUrl) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(BASE_URL_KEY, baseUrl);
+        editor.putString("BaseUrl", baseUrl);
         editor.apply();
     }
 
 
     private String getBaseUrl() {
-        return sharedPreferences.getString(BASE_URL_KEY, getResources().getString(R.string.BaseUrl));
+        return sharedPreferences.getString("BaseUrl", getResources().getString(R.string.BaseUrl));
     }
 }

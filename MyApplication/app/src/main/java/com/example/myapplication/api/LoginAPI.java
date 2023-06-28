@@ -1,8 +1,5 @@
 package com.example.myapplication.api;
 
-
-import static com.example.myapplication.api.MyApplication.context;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -43,18 +40,21 @@ public class LoginAPI {
         this.fireBaseToken = fireBaseToken;
         this.context = MyApplication.context;
 
-        SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
-        String BaseUrl = SharedPreferences.getString("BaseUrl","");
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences(
+                MyApplication.context.getString(R.string.SharedPrefs),
+                Context.MODE_PRIVATE
+        );
+        String baseUrl = sharedPreferences.getString("BaseUrl", MyApplication.context.getString(R.string.BaseUrl));
         retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
-        userDB = Room.databaseBuilder(context, UserDB.class, "user-db")
+        userDB = Room.databaseBuilder(MyApplication.context, UserDB.class, "user-db")
                 .fallbackToDestructiveMigration()
                 .build();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        SharedPreferences loginPref = context.getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        editor = loginPref.edit();
     }
 
     public void postLogin(User user, LoginCallback callback) {

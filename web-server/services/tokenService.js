@@ -42,3 +42,24 @@ const getTokenByUsername = async username => {
         throw error
       }
     }
+
+exports.deleteToken = async username => {
+  try {
+    return deleteToken(username)
+  } catch (error) {
+    throw error
+  }
+}
+
+const deleteToken = async username => {
+  try {
+    const deletedToken = await Token.findOneAndDelete({ username });
+    if (deletedToken) {
+      console.log(`Token with username '${username}' deleted successfully.`);
+    } else {
+      console.log(`Token with username '${username}' not found.`);
+    }
+  } catch (error) {
+    console.error('Error deleting token:', error);
+  }
+}

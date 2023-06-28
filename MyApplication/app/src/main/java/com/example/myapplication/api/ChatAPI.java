@@ -46,7 +46,6 @@ public class ChatAPI {
                 Context.MODE_PRIVATE
         );
         String baseUrl = sharedPreferences.getString("BaseUrl", MyApplication.context.getString(R.string.BaseUrl));
-
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())

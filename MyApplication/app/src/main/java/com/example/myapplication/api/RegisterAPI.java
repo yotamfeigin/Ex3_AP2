@@ -1,7 +1,5 @@
 package com.example.myapplication.api;
 
-import static com.example.myapplication.api.MyApplication.context;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -27,23 +25,22 @@ public class RegisterAPI {
 
     private String profilePic;
 
-
     public RegisterAPI(String username, String password, String displayName, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
         this.profilePic = profilePic;
 
-
-        SharedPreferences SharedPreferences = context.getSharedPreferences(String.valueOf(R.string.SharedPrefs), Context.MODE_PRIVATE);
-        String BaseUrl = SharedPreferences.getString("BaseUrl","");
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences(
+                MyApplication.context.getString(R.string.SharedPrefs),
+                Context.MODE_PRIVATE
+        );
+        String baseUrl = sharedPreferences.getString("BaseUrl", MyApplication.context.getString(R.string.BaseUrl));
         retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         regsiterServiceAPI = retrofit.create(RegsiterServiceAPI.class);
-
     }
 
     public void register() {

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const chatService = require('../services/chatService');
 const tokenService = require('../services/tokenService');
-
+const server = require('../server.js');
 const admin = require('../Tokens/tokenAdmin.js')
 
 
@@ -20,6 +20,7 @@ exports.addMessage = async (req, res) => {
     const message = await messageService.addMessage(chatId, sender, msg);
     if (message) {
       notify(msg, sender, chatId);
+      server.refreshReact(chatId);
       res.status(200).json(message);
     } else {
       res.status(401).json({ error: 'User not found or message creation failed' });

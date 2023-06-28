@@ -1,0 +1,261 @@
+
+ body {
+    background-color: #3d0a91 !important;
+    margin: 0px;
+}
+
+a {
+    text-decoration-line: underline;
+}
+
+.textColor {
+    color: #e0cffc;
+}
+
+.text-muted {
+    color: #e0cffc;
+}
+
+main {
+    background-color: #6610f2;
+    margin: 0% 10%;
+    width: 80%;
+    position: absolute;
+    top: 10%;
+    border: 3px;
+}
+
+.label2 {
+    background-color: indigo;
+}
+
+#chooseFile {
+    color: black;
+    background-color: gray;
+}
+
+.btn {
+    border: 1px solid #c29ffa;
+}
+
+
+/* Green */
+
+.success {
+    border-color: #04AA6D;
+    color: green;
+}
+
+button {
+    color: white;
+}
+
+.login {
+    margin: 3% 10%;
+}
+
+#profile_picture {
+    width: 130px;
+    height: 130px;
+    margin-left: 2%;
+}
+
+#user_profile {
+    background-color: #6018b0;
+    height: 50px;
+    align-items: center;
+    display: flex;
+    border: 0.5px solid #c29ffa
+}
+
+h1 {
+    margin-left: 10%;
+}
+
+.chat_profile_picture {
+    width: 8%;
+    height: 95%;
+    border-radius: 33%;
+    margin: 1%;
+}
+
+.contatcs_chat {
+    font-size: 15px;
+}
+
+.contact_profile {
+    margin: 0.5%;
+    border: 0.3px solid #e0cffc;
+    align-items: center;
+    display: flex;
+}
+
+#contacts {
+    display: block;
+    float: left;
+    width: 30%;
+}
+
+#contacts-list {
+    display: block;
+    float: left;
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+
+}
+
+#chat {
+    float: right;
+    width: 70%;
+    height: 82.7%;
+}
+
+#chat_profile_picture_2 {
+    width: auto;
+    border-radius: 33%;
+    margin-right: 0.5%;
+    margin: 0.5%;
+    height: auto;
+    max-width: 5%;
+    max-height: 95%;
+}
+
+.contact_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.last_seen {
+    font-size: 10px;
+    color: #fff;
+    margin: 0;
+    margin-left: auto;
+    align-self: flex-start;
+}
+
+.last_massege {
+    font-size: 14px;
+    color: black;
+    margin: 0;
+}
+
+.contact_profile:active {
+    background-color: #999999;
+}
+
+#contact_profile_main {
+    background-color: #999999;
+}
+
+#logout {
+    position: relative;
+    top: 0.5%;
+    float: right;
+}
+
+#add_contact_button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+}
+
+#chat_box {
+    background-color: #c29ffa;
+    height: 400px;
+    display: grid;
+    position: relative;
+    align-content: end; /* Changed from 'start' to 'end' */
+    overflow-y: auto;
+    position: relative;
+    width: 100%;
+    align-items: end;
+    /* Additional CSS to reverse the order */
+    display: flex;
+    flex-direction: column;
+  }
+
+#send {
+    vertical-align: middle;
+    display: flex;
+    position: relative;
+    bottom: 0%;
+    height: fit-content;
+}
+
+#send_btn {
+    display: inline-block;
+    vertical-align: middle;
+    height: 34px;
+    position: relative;
+}
+
+#send_message {
+    background-color: #6610f2 !important;
+    align-items: center;
+    display: grid;
+    height: fit-content;
+    position: relative;
+    bottom: 0;
+}
+
+#main_chat {
+    vertical-align: middle;
+    display: table-row-group;
+    height: fit-content;
+}
+
+#chat_header {
+    align-items: center;
+    display: flex;
+    height:50px;
+
+}
+
+.bubble {
+    font-size: 100%;
+    margin-top: 0.5%;
+    --r: 25px;
+    /* the radius */
+    --t: 30px;
+    /* the size of the tail */
+    --bubble-color-left: linear-gradient(135deg, #FFC700, #00FF95);
+    /* gradient for left bubble */
+    --bubble-color-right: linear-gradient(45deg, #FFC700, #FF5733);
+    /* gradient for right bubble */
+    max-width: 300px;
+    padding: calc(2*var(--r)/3);
+    -webkit-mask: radial-gradient(var(--t) at var(--_d) 0, #0000 98%, #000 102%) var(--_d) 100%/calc(100% - var(--r)) var(--t) no-repeat, conic-gradient(at var(--r) var(--r), #000 75%, #0000 0) calc(var(--r)/-2) calc(var(--r)/-2) padding-box, radial-gradient(50% 50%, #000 98%, #0000 101%) 0 0/var(--r) var(--r) space padding-box;
+    /* set the background color using the respective gradient variables */
+    background: var(--bubble-color-left) border-box;
+    color: #fff;
+}
+
+.left {
+    --_d: 0%;
+    border-left: var(--t) solid #0000;
+    margin-right: var(--t);
+    place-self: start;
+    position: relative;
+    /* set the color gradient for left bubble */
+    --bubble-color-left: linear-gradient(135deg, #FFC700, #00FF95);
+}
+
+.right {
+    --_d: 100%;
+    border-right: var(--t) solid #0000;
+    margin-left: 50%;
+    place-self: end;
+    float: right;
+    /* set the color gradient for right bubble */
+    --bubble-color-right: linear-gradient(45deg, #FFC700, #FF5733);
+    /* mix the gradient colors for right bubble */
+    --bubble-color-left: linear-gradient(135deg, #FFC700, #FF5733);
+}
+
+.name_last_seen{
+    margin-right: auto;
+}

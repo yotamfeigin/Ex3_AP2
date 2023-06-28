@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -9,7 +7,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.os.AsyncTask;
@@ -43,51 +40,38 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logoImageView;
     private RelativeLayout logoContainer;
     private String fireBaseToken;
-    private User user;
-    public String BaseUrl;
-    private Button loginButton;
-    private Button registerButton;
-    private Button settingsButton;
 
+    private User user;
+    private Button settingsButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
         user = new User("","","");
-        BaseUrl = getString(R.string.BaseUrl);
-        saveUrl(); // Saving the default Url to SharedPreferences
-
-
         progressBar = findViewById(R.id.progress_bar);
         logoImageView = findViewById(R.id.logo);
         logoContainer = findViewById(R.id.logo_container);
 
         Button login = findViewById(R.id.login_button);
-
-
-        ExampleAsyncTask task = new ExampleAsyncTask(this);
-        task.execute(100);
-        loginButton = findViewById(R.id.login_button);
-        loginButton.setOnClickListener(new View.OnClickListener(){
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToLoginPage();
             }
         });
 
-        registerButton = findViewById(R.id.register_button);
+        Button register = findViewById(R.id.register_button);
 
-
-        registerButton.setOnClickListener( new View.OnClickListener() {
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToRegisterPage();
             }
         });
+
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,17 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("SETTINGS", "onClick: ");
             }
         });
-        loginButton.setAlpha(0f);
-        registerButton.setAlpha(0f);
-        settingsButton.setAlpha(0f);
-
         FirebaseApp.initializeApp(this);
         requestNotificationPermission();
 
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        String token = task1.getResult();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult();
                         Log.d("FCM Token", "Token: " + token);
                         fireBaseToken = token;
                         String savedUsername = sharedPreferences.getString("username", null);
@@ -151,16 +131,7 @@ public class MainActivity extends AppCompatActivity {
         ExampleAsyncTask task = new ExampleAsyncTask(this);
         task.execute(100);
     }
-    public void saveUrl() {
-        SharedPreferences SharedPreferences = getSharedPreferences(String.valueOf(R.string.SharedPrefs), MODE_PRIVATE);
-        SharedPreferences.Editor editor = SharedPreferences.edit();
-        editor.putString("BaseUrl",BaseUrl);
-        editor.apply();
-    }
-    public void goToSettings() {
-        Intent intent = new Intent(MainActivity.this, Settings.class);
-        startActivity(intent);
-    }
+
     public void goToLoginPage() {
         Intent intent = new Intent(MainActivity.this, LoginPage.class);
         intent.putExtra("firebaseToken", fireBaseToken);
@@ -169,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToRegisterPage() {
         Intent intent = new Intent(MainActivity.this, RegisterPage.class);
+        startActivity(intent);
+    }
+
+    public void goToSettings() {
+        Intent intent = new Intent(MainActivity.this, Settings.class);
         startActivity(intent);
     }
 
@@ -272,24 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
             ObjectAnimator animation = ObjectAnimator.ofFloat(activity.logoContainer, "translationY", -1000f);
             animation.setDuration(2000);
-            animation.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    // Animation has ended, fade in the buttons
-                    final long duration = 1000;
-
-                    activity.loginButton.setVisibility(View.VISIBLE);
-                    activity.registerButton.setVisibility(View.VISIBLE);
-                    activity.settingsButton.setVisibility(View.VISIBLE);
-
-                    activity.loginButton.animate().alpha(1f).setDuration(duration).start();
-                    activity.registerButton.animate().alpha(1f).setDuration(duration).start();
-                    activity.settingsButton.animate().alpha(1f).setDuration(duration).start();
-                }
-
-
-
-            });
             animation.start();
 
         }
